@@ -1,0 +1,153 @@
+{
+	"ABI version": 2,
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getConnectorAddress",
+			"inputs": [
+				{"name":"_answer_id","type":"uint32"},
+				{"name":"connectorSoArg","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "connectRoot",
+			"inputs": [
+				{"name":"root","type":"address"},
+				{"name":"souint","type":"uint256"},
+				{"name":"gramsToConnector","type":"uint128"},
+				{"name":"gramsToRoot","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"statusConnected","type":"bool"}
+			]
+		},
+		{
+			"name": "connectCallback",
+			"inputs": [
+				{"name":"wallet","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "transferAB",
+			"inputs": [
+				{"name":"rootA","type":"address"},
+				{"name":"rootB","type":"address"},
+				{"name":"to","type":"address"},
+				{"name":"tokens","type":"uint128"},
+				{"name":"grams","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"statusTransfer","type":"bool"}
+			]
+		},
+		{
+			"name": "tokensReceivedCallback",
+			"inputs": [
+				{"name":"token_wallet","type":"address"},
+				{"name":"token_root","type":"address"},
+				{"name":"amount","type":"uint128"},
+				{"name":"sender_public_key","type":"uint256"},
+				{"name":"sender_address","type":"address"},
+				{"name":"sender_wallet","type":"address"},
+				{"name":"original_gas_to","type":"address"},
+				{"name":"updated_balance","type":"uint128"},
+				{"name":"payload","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getCallback",
+			"inputs": [
+				{"name":"id","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"token_wallet","type":"address"},
+				{"name":"token_root","type":"address"},
+				{"name":"amount","type":"uint128"},
+				{"name":"sender_public_key","type":"uint256"},
+				{"name":"sender_address","type":"address"},
+				{"name":"sender_wallet","type":"address"},
+				{"name":"original_gas_to","type":"address"},
+				{"name":"updated_balance","type":"uint128"},
+				{"name":"payload_type","type":"uint8"},
+				{"name":"payload_root","type":"address"},
+				{"name":"payload_wallet","type":"address"}
+			]
+		},
+		{
+			"name": "getBalance",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"balance","type":"uint128"}
+			]
+		},
+		{
+			"name": "soUINT",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"soUINT","type":"uint256"}
+			]
+		},
+		{
+			"name": "codeDEXConnector",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"codeDEXConnector","type":"cell"}
+			]
+		},
+		{
+			"name": "roots",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"roots","type":"map(address,address)"}
+			]
+		},
+		{
+			"name": "rootConnector",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"rootConnector","type":"map(address,address)"}
+			]
+		},
+		{
+			"name": "connectors",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"root_address","type":"address"},{"name":"souint","type":"uint256"},{"name":"status","type":"bool"}],"name":"connectors","type":"map(address,tuple)"}
+			]
+		},
+		{
+			"name": "counterCallback",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"counterCallback","type":"uint256"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"soUINT","type":"uint256"},
+		{"key":2,"name":"codeDEXConnector","type":"cell"}
+	],
+	"events": [
+	]
+}
