@@ -1,12 +1,12 @@
 # Smartcontracts and js scripts for deploy DefiSpace DEX (stage2)
 
 ## tvm_linker commands for make TVMcell ready code  of smartcontracts for DEXRoot
--`<your path to>`/tvm_linker decode --tvc DEXConnector.tvc | grep code: | cut -c 8- > DEXConnector.txt
--`<your path to>`/tvm_linker decode --tvc DEXClient.tvc | grep code: | cut -c 8- > DEXClient.txt
--`<your path to>`/tvm_linker decode --tvc DEXPair.tvc | grep code: | cut -c 8- > DEXPair.txt
--`<your path to>`/tvm_linker decode --tvc RootTokenContract.tvc | grep code: | cut -c 8- > RootTokenContract.txt
--`<your path to>`/tvm_linker decode --tvc TONTokenWallet.tvc | grep code: | cut -c 8- > TONTokenWallet.txt
--`<your path to>`/tvm_linker decode --tvc Giver.tvc | grep code: | cut -c 8- > Giver.txt
+* `<your path to>`/tvm_linker decode --tvc DEXConnector.tvc | grep code: | cut -c 8- > DEXConnector.txt
+* `<your path to>`/tvm_linker decode --tvc DEXClient.tvc | grep code: | cut -c 8- > DEXClient.txt
+* `<your path to>`/tvm_linker decode --tvc DEXPair.tvc | grep code: | cut -c 8- > DEXPair.txt
+* `<your path to>`/tvm_linker decode --tvc RootTokenContract.tvc | grep code: | cut -c 8- > RootTokenContract.txt
+* `<your path to>`/tvm_linker decode --tvc TONTokenWallet.tvc | grep code: | cut -c 8- > TONTokenWallet.txt
+* `<your path to>`/tvm_linker decode --tvc Giver.tvc | grep code: | cut -c 8- > Giver.txt
 
 Copy and paste this into `DEXRootCode.js`
 
@@ -59,7 +59,7 @@ DEX Client step1 connect to `DEX Pair 0 WTON-USDT` at the end it will deploy all
 this script mint 2_000_000_000_000_000_000 nano `WTONs` and 1_000_000_000_000_000_000 nano `USDT` to DEX Client wallets for testing purpose
 
 ## node dc-dp0-provide
-this script provide liquidity 2_000_000_000_000_000_000 nano `WTONs` and 2_000_000_000_000_000_000 nano `USDT` from DEX Client wallets to DEX Pair 0 and it mint LP tokens to DEX Client as proof of provide liquidity
+this script provide liquidity 2_000_000_000_000_000_000 nano `WTONs` and 1_000_000_000_000_000_000 nano `USDT` from DEX Client wallets to DEX Pair 0 and it mint LP tokens to DEX Client as proof of provide liquidity
 
 ## node dc-dp0-return
 this script burn 1 000 000 000 nano DS-WTON/USDT LP tokens by DEX Client and DEX Pair return part of liquidity which is equal to burned tokens
