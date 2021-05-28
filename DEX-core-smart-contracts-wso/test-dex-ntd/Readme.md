@@ -53,7 +53,7 @@ DEX Client deploy `DEX Pair 0 WTON-USDT`
 DEX Client step0 connect to `DEX Pair 0 WTON-USDT` at the end it will get by callback from `DEX Pair 0 WTON-USDT` root0, root1, rootLP
 
 ## node dc-dp0-connect1
-DEX Client step1 connect to `DEX Pair 0 WTON-USDT` at the end it will deploy all wallets that need for work with `DEX Pair 0 WTON-USDT`
+DEX Client step1 connect to `DEX Pair 0 WTON-USDT`, first script compute connectorSoArg0, connectorSoArg01, connectorSoArg2 and then deploy 3 wallets that need for work with `DEX Pair 0 WTON-USDT`
 
 ## node dc-dp0-mint
 this script mint 2_000_000_000_000_000_000 nano `WTONs` and 1_000_000_000_000_000_000 nano `USDT` to DEX Client wallets for testing purpose
