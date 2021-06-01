@@ -103,10 +103,6 @@ console.log("Contract reacted to your setRootTokenCode:", response.decoded.outpu
 response = await rootAcc.run("setTONTokenWalletCode", {code:DEXRootCode.wallet});
 console.log("Contract reacted to your setTONTokenWalletCode:", response.decoded.output);
 
-// Call `setGiverCode` function
-response = await rootAcc.run("setGiverCode", {code:DEXRootCode.giver});
-console.log("Contract reacted to your setGiverCode:", response.decoded.output);
-
 
 
 

@@ -11,9 +11,8 @@ const fs = require('fs');
 const pathJsonRoot = './DEXRootContract.json';
 const pathJsonClient = './DEXClientContract.json';
 
-const pathJsonPairTonUsdt = './DEXPairContractTonUsdt.json';
-
-// const pathJsonPairTonUsdc = './DEXPairContractTonUsdc.json';
+// const pathJsonPairTonUsdt = './DEXPairContractTonUsdt.json';
+const pathJsonPairTonUsdc = './DEXPairContractTonUsdc.json';
 // const pathJsonPairTonBtc = './DEXPairContractTonBtc.json';
 // const pathJsonPairTonEth = './DEXPairContractTonEth.json';
 // const pathJsonPairBtcUsdt = './DEXPairContractBtcUsdt.json';
@@ -21,9 +20,8 @@ const pathJsonPairTonUsdt = './DEXPairContractTonUsdt.json';
 // const pathJsonPairUsdcUsdt = './DEXPairContractUsdcUsdt.json';
 
 const pathJsonWTON = './WTONdata.json';
-const pathJsonUSDT = './USDTdata.json';
-
-// const pathJsonUSDC = './USDCdata.json';
+// const pathJsonUSDT = './USDTdata.json';
+const pathJsonUSDC = './USDCdata.json';
 // const pathJsonBTC = './BTCdata.json';
 // const pathJsonETH = './ETHdata.json';
 
@@ -46,12 +44,12 @@ async function main(client) {
   console.log(clientKeys);
   console.log(clientAddr);
 
-  const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonUsdt,{encoding: "utf8"})).address;
+  const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonUsdс,{encoding: "utf8"})).address;
 
   console.log(pairAddr);
 
-  responce = await clientAcc.run("processSwapB", {pairAddr:pairAddr,qtyB:495513239});
-  console.log("Contract reacted to your processSwapA:", responce.decoded.output);
+  responce = await clientAcc.run("processLiquidity", {pairAddr:pairAddr,qtyA:2000000000000000,qtyB:1000000000000000});
+  console.log("Contract reacted to your processLiquidity:", responce.decoded.output);
 
   // response = await clientAcc.runLocal("pairKeys", {});
   // console.log("Contract reacted to your pairKeys:", response.decoded.output);

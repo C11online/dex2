@@ -74,7 +74,7 @@ async function main(client) {
 
 
   response = await clientAcc.run("createNewPair", {root0:wtonAddr,root1:usdtAddr,pairSoArg:pair.pairSoArg,connectorSoArg0:pair.connectorSoArg0,connectorSoArg1:pair.connectorSoArg1,rootSoArg:pair.rootSoArg,rootName:pair.rootName,rootSymbol:pair.rootSymbol,rootDecimals:pair.rootDecimals,grammsForPair:500000000,grammsForRoot:500000000,grammsForConnector:500000000,grammsForWallet:1500000000,grammsTotal:10000000000});
-  console.log("Contract reacted to your createDEXclient:", response.decoded.output);
+  console.log("Contract reacted to your createNewPair:", response.decoded.output);
 
   // // Call `rootDEX` function
   // response = await clientAcc.runLocal("rootDEX", {});

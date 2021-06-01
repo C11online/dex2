@@ -1,7 +1,11 @@
 const {TonClient, abiContract, signerKeys} = require("@tonclient/core");
 const { libNode } = require("@tonclient/lib-node");
 const { Account } = require("@tonclient/appkit");
+const { DEXRootContract } = require("./DEXRoot.js");
 const { DEXClientContract } = require("./DEXClient.js");
+const { DEXConnectorContract } = require("./DEXConnector.js");
+const { RootTokenContract } = require("./RootTokenContract.js");
+const { GiverContract } = require("./Giver.js");
 const dotenv = require('dotenv').config();
 const networks = ["http://localhost",'net.ton.dev','main.ton.dev','rustnet.ton.dev'];
 const hello = ["Hello localhost TON!","Hello dev net TON!","Hello main net TON!","Hello rust dev net TON!"];
@@ -11,9 +15,8 @@ const fs = require('fs');
 const pathJsonRoot = './DEXRootContract.json';
 const pathJsonClient = './DEXClientContract.json';
 
-const pathJsonPairTonUsdt = './DEXPairContractTonUsdt.json';
-
-// const pathJsonPairTonUsdc = './DEXPairContractTonUsdc.json';
+// const pathJsonPairTonUsdt = './DEXPairContractTonUsdt.json';
+const pathJsonPairTonUsdc = './DEXPairContractTonUsdc.json';
 // const pathJsonPairTonBtc = './DEXPairContractTonBtc.json';
 // const pathJsonPairTonEth = './DEXPairContractTonEth.json';
 // const pathJsonPairBtcUsdt = './DEXPairContractBtcUsdt.json';
@@ -21,16 +24,28 @@ const pathJsonPairTonUsdt = './DEXPairContractTonUsdt.json';
 // const pathJsonPairUsdcUsdt = './DEXPairContractUsdcUsdt.json';
 
 const pathJsonWTON = './WTONdata.json';
-const pathJsonUSDT = './USDTdata.json';
-
-// const pathJsonUSDC = './USDCdata.json';
+// const pathJsonUSDT = './USDTdata.json';
+const pathJsonUSDC = './USDCdata.json';
 // const pathJsonBTC = './BTCdata.json';
 // const pathJsonETH = './ETHdata.json';
 
+const hex = require('ascii-hex');
+const hex2ascii = require('hex2ascii');
+function toHex(input) {
+  let output = '';
+  for (i = 0; i < input.length; i ++){output += hex(input[i]).toString(16)}
+  return String(output);
+}
 
+const name = toHex("DS-WTON/USDC");
+const symbol = toHex("DS-WTON/USDC");
+const decimals = 9;
 
 TonClient.useBinaryLibrary(libNode);
 
+function getShard(string) {
+  return string[2];
+}
 
 async function logEvents(params, response_type) {
   // console.log(`params = ${JSON.stringify(params, null, 2)}`);
@@ -42,19 +57,27 @@ async function main(client) {
   const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   const clientAddr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).address;
   const clientAcc = new Account(DEXClientContract, {address:clientAddr,signer:clientKeys,client,});
+  let pubkey = '0x'+clientKeys.keys.public;
 
-  console.log(clientKeys);
-  console.log(clientAddr);
+  const wtonAddr = JSON.parse(fs.readFileSync(pathJsonWTON,{encoding: "utf8"})).address;
+  const usdcAddr = JSON.parse(fs.readFileSync(pathJsonUSDC,{encoding: "utf8"})).address;
 
-  const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonUsdt,{encoding: "utf8"})).address;
+  const pair = JSON.parse(fs.readFileSync(pathJsonPairTonUsdc,{encoding: "utf8"}));
 
-  console.log(pairAddr);
+  console.log(pair.pairSoArg);
+  console.log(pair.connectorSoArg0);
+  console.log(pair.connectorSoArg1);
+  console.log(pair.rootSoArg);
 
-  responce = await clientAcc.run("processSwapB", {pairAddr:pairAddr,qtyB:495513239});
-  console.log("Contract reacted to your processSwapA:", responce.decoded.output);
 
-  // response = await clientAcc.runLocal("pairKeys", {});
-  // console.log("Contract reacted to your pairKeys:", response.decoded.output);
+
+  response = await clientAcc.run("createNewPair", {root0:wtonAddr,root1:usdcAddr,pairSoArg:pair.pairSoArg,connectorSoArg0:pair.connectorSoArg0,connectorSoArg1:pair.connectorSoArg1,rootSoArg:pair.rootSoArg,rootName:pair.rootName,rootSymbol:pair.rootSymbol,rootDecimals:pair.rootDecimals,grammsForPair:500000000,grammsForRoot:500000000,grammsForConnector:500000000,grammsForWallet:1500000000,grammsTotal:10000000000});
+  console.log("Contract reacted to your createNewPair:", response.decoded.output);
+
+  // // Call `rootDEX` function
+  // response = await clientAcc.runLocal("rootDEX", {});
+  // console.log("Contract reacted to your rootDEX:", response.decoded.output);
+
 
 
 

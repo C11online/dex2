@@ -50,7 +50,7 @@ async function main(client) {
 
   console.log(pairAddr);
 
-  responce = await clientAcc.run("processSwapA", {pairAddr:pairAddr,qtyA:1000000000});
+  responce = await clientAcc.run("processSwapA", {pairAddr:pairAddr,qtyA:994009001});
   console.log("Contract reacted to your processSwapA:", responce.decoded.output);
 
   // response = await clientAcc.runLocal("pairKeys", {});

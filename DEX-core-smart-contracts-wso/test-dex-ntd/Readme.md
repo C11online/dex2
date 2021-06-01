@@ -6,7 +6,6 @@
 * `<your path to>`/tvm_linker decode --tvc DEXPair.tvc | grep code: | cut -c 8- > DEXPair.txt
 * `<your path to>`/tvm_linker decode --tvc RootTokenContract.tvc | grep code: | cut -c 8- > RootTokenContract.txt
 * `<your path to>`/tvm_linker decode --tvc TONTokenWallet.tvc | grep code: | cut -c 8- > TONTokenWallet.txt
-* `<your path to>`/tvm_linker decode --tvc Giver.tvc | grep code: | cut -c 8- > Giver.txt
 
 Copy and paste this into `DEXRootCode.js`
 

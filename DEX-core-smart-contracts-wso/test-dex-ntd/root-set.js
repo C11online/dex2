@@ -19,48 +19,29 @@ async function logEvents(params, response_type) {
   // console.log(`response_type = ${JSON.stringify(response_type, null, 2)}`);
 }
 
-let extraton = '5173301c33c5ea212613b84626d9780e2556c5a2476433aafa89acb677a48fac';
+let extratonAddr = '0:c600270c8f92754ee3e158afe58222a764e7d43c084b49f16b7d4fafab07d664';
 
 async function main(client) {
   let response;
+  const pathJsonClient = './DEXClientContract.json';
+  const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
+
   const rootAddr = JSON.parse(fs.readFileSync(pathJsonRoot,{encoding: "utf8"})).address;
-  const rootAcc = new Account(DEXRootContract, {address:rootAddr,client,});
+  const rootAcc = new Account(DEXRootContract, {
+    address:rootAddr,
+    signer: clientKeys,
+    client,
+});
   console.log("DEXroot address:", rootAddr);
 
-  const pathJsonClient = './DEXClientContract.json';
+  // const pathJsonClient = './DEXClientContract.json';
   // const giverKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   // let pubkey = '0x'+giverKeys.keys.public;
 
-  let pubkey = '0x'+extraton;
 
-// Call `creators` function
-response = await rootAcc.runLocal("creators", {});
-console.log("Contract reacted to your creators:", response.decoded.output);
-
-// Call `balanceOf` function
-response = await rootAcc.runLocal("balanceOf", {});
-console.log("Contract reacted to your balanceOf:", response.decoded.output);
-
-
-// Call `pairs` function
-response = await rootAcc.runLocal("pairs", {});
-console.log("Contract reacted to your pairs:", response.decoded.output);
-
-// Call `pairKeys` function
-response = await rootAcc.runLocal("pairKeys", {});
-console.log("Contract reacted to your pairKeys:", response.decoded.output);
-
-// Call `pubkeys` function
-response = await rootAcc.runLocal("pubkeys", {});
-console.log("Contract reacted to your pubkeys:", response.decoded.output);
-
-// Call `clients` function
-response = await rootAcc.runLocal("clients", {});
-console.log("Contract reacted to your clients:", response.decoded.output);
-
-// Call `clientKeys` function
-response = await rootAcc.runLocal("clientKeys", {});
-console.log("Contract reacted to your clientKeys:", response.decoded.output);
+  // Call `setCreator` function
+  response = await rootAcc.run("setCreator", {giverAddr:extratonAddr});
+  console.log("Contract reacted to your setCreator:", response.decoded.output);
 
 
 

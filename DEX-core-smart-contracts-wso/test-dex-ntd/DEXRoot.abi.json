@@ -60,9 +60,9 @@
 			]
 		},
 		{
-			"name": "setGiverCode",
+			"name": "setCreator",
 			"inputs": [
-				{"name":"code","type":"cell"}
+				{"name":"giverAddr","type":"address"}
 			],
 			"outputs": [
 			]
@@ -73,16 +73,6 @@
 				{"name":"_answer_id","type":"uint32"},
 				{"name":"clientPubKey","type":"uint256"},
 				{"name":"clientSoArg","type":"uint256"}
-			],
-			"outputs": [
-				{"name":"value0","type":"address"}
-			]
-		},
-		{
-			"name": "getGiverAddress",
-			"inputs": [
-				{"name":"_answer_id","type":"uint32"},
-				{"name":"giverPubKey","type":"uint256"}
 			],
 			"outputs": [
 				{"name":"value0","type":"address"}
@@ -257,14 +247,6 @@
 			]
 		},
 		{
-			"name": "codeGiver",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"codeGiver","type":"cell"}
-			]
-		},
-		{
 			"name": "pairs",
 			"inputs": [
 			],
@@ -310,6 +292,14 @@
 			],
 			"outputs": [
 				{"name":"balanceOf","type":"map(address,uint128)"}
+			]
+		},
+		{
+			"name": "creators",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"creators","type":"map(uint256,address)"}
 			]
 		}
 	],
