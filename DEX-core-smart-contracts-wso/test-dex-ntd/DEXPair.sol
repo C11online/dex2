@@ -78,6 +78,13 @@ contract DEXPair is IDEXPair, IDEXConnect, ITokensReceivedCallback, IBurnTokensC
     _;
   }
 
+  modifier checkPubKeyAndAccept {
+    require(msg.pubkey() == tvm.pubkey(), 103);
+    tvm.accept();
+    _;
+  }
+
+
   constructor(uint256 souintA, uint256 souintB, uint128 gramsDeployConnector, uint128 gramsDeployWallet) public checkOwnerAndAccept {
     counterCallback = 0;
     connectRoot(rootA, souintA, gramsDeployConnector, gramsDeployWallet);
@@ -227,8 +234,8 @@ contract DEXPair is IDEXPair, IDEXConnect, ITokensReceivedCallback, IBurnTokensC
               balanceReserve[rootA] += amountA;
               balanceReserve[rootB] += amountB;
               totalSupply += amountMin;
-              processingStatus[rootA][arg1] == false;
-              processingStatus[rootB][arg1] == false;
+              processingStatus[rootA][arg1] = false;
+              processingStatus[rootB][arg1] = false;
               processingData[rootA][arg1] = 0;
               processingData[rootB][arg1] = 0;
               TvmCell body = tvm.encodeBody(IRootTokenContract(rootAB).mint, amountMin, arg2);
@@ -256,8 +263,8 @@ contract DEXPair is IDEXPair, IDEXConnect, ITokensReceivedCallback, IBurnTokensC
               balanceReserve[rootA] += provideA;
               balanceReserve[rootB] += provideB;
               totalSupply += amountMin;
-              processingStatus[rootA][arg1] == false;
-              processingStatus[rootB][arg1] == false;
+              processingStatus[rootA][arg1] = false;
+              processingStatus[rootB][arg1] = false;
               processingData[rootA][arg1] = 0;
               processingData[rootB][arg1] = 0;
               TvmCell body = tvm.encodeBody(IRootTokenContract(rootAB).mint, amountMin, arg2);
@@ -347,7 +354,7 @@ contract DEXPair is IDEXPair, IDEXConnect, ITokensReceivedCallback, IBurnTokensC
     }
   }
 
-  function getCallback(uint id) public view checkOwnerAndAccept returns (
+  function getCallback(uint id) public view checkPubKeyAndAccept returns (
     address token_wallet,
     address token_root,
     uint128 amount,

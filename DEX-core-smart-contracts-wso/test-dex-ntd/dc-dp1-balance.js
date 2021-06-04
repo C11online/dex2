@@ -27,6 +27,9 @@ const pathJsonUSDC = './USDCdata.json';
 // const pathJsonBTC = './BTCdata.json';
 // const pathJsonETH = './ETHdata.json';
 
+const pathRootA = pathJsonWTON;
+const pathRootB = pathJsonUSDC;
+const pathPair = pathJsonPairTonUsdc;
 
 
 TonClient.useBinaryLibrary(libNode);
@@ -41,14 +44,14 @@ async function main(client) {
   let responce;
 
 
-  const rootKeysA = JSON.parse(fs.readFileSync(pathJsonWTON,{encoding: "utf8"})).keys;
-  const rootAddrA = JSON.parse(fs.readFileSync(pathJsonWTON,{encoding: "utf8"})).address;
+  const rootKeysA = JSON.parse(fs.readFileSync(pathRootA,{encoding: "utf8"})).keys;
+  const rootAddrA = JSON.parse(fs.readFileSync(pathRootA,{encoding: "utf8"})).address;
   const rootAccA = new Account(RootTokenContract, {address: rootAddrA,signer: rootKeysA,client,});
   console.log("WTON root:", rootAddrA);
 
 
-  const rootKeysB = JSON.parse(fs.readFileSync(pathJsonUSDС,{encoding: "utf8"})).keys;
-  const rootAddrB = JSON.parse(fs.readFileSync(pathJsonUSDС,{encoding: "utf8"})).address;
+  const rootKeysB = JSON.parse(fs.readFileSync(pathRootB,{encoding: "utf8"})).keys;
+  const rootAddrB = JSON.parse(fs.readFileSync(pathRootB,{encoding: "utf8"})).address;
   const rootAccB = new Account(RootTokenContract, {address: rootAddrB,signer: rootKeysB,client,});
   console.log("USDС root:", rootAddrB);
 
@@ -58,7 +61,7 @@ async function main(client) {
   const clientAcc = new Account(DEXClientContract, {address:clientAddr,signer:clientKeys,client,});
 
 
-  const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonUsdс,{encoding: "utf8"})).address;
+  const pairAddr = JSON.parse(fs.readFileSync(pathPair,{encoding: "utf8"})).address;
 
 
   response = await clientAcc.runLocal("rootWallet", {});

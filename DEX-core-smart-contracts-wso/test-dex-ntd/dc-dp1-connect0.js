@@ -25,6 +25,8 @@ const pathJsonUSDC = './USDCdata.json';
 // const pathJsonBTC = './BTCdata.json';
 // const pathJsonETH = './ETHdata.json';
 
+const currentPair = pathJsonPairTonUsdc;
+
 
 
 TonClient.useBinaryLibrary(libNode);
@@ -44,7 +46,7 @@ async function main(client) {
   console.log(clientKeys);
   console.log(clientAddr);
 
-  const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonUsdc,{encoding: "utf8"})).address;
+  const pairAddr = JSON.parse(fs.readFileSync(currentPair,{encoding: "utf8"})).address;
 
   console.log(pairAddr);
 

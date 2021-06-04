@@ -1,12 +1,17 @@
 const {TonClient, abiContract, signerKeys} = require("@tonclient/core");
 const { libNode } = require("@tonclient/lib-node");
 const { Account } = require("@tonclient/appkit");
-const { RContract } = require("./RootTokenContract.js");
-const { TTWContract } = require("./TONTokenWalletContract.js");
-const { GiverContract } = require("./GiverContract.js");
-const networks = ["http://localhost",'net.ton.dev','main.ton.dev'];
-const hello = ["Hello localhost TON!","Hello devnet TON!","Hello maitnet TON!"];
-const networkSelector = 1;
+const dotenv = require('dotenv').config();
+const { RootTokenContract } = require("./RootTokenContract.js");
+const { TONTokenWalletContract } = require("./TONTokenWallet.js");
+const { DEXRootCode } = require("./DEXRootCode.js");
+const { GiverContract } = require("./Giver.js");
+const { GiverContractNTD } = require("./GiverContract.js");
+const networks = ["http://localhost",'net.ton.dev','main.ton.dev','rustnet.ton.dev'];
+const hello = ["Hello localhost TON!","Hello dev net TON!","Hello main net TON!","Hello rust dev net TON!"];
+const networkSelector = process.env.NET_SELECTOR;
+
+const ZERO_ADDRESS = '0:0000000000000000000000000000000000000000000000000000000000000000';
 
 
 const fs = require('fs');
@@ -51,12 +56,10 @@ async function main(client) {
       const giver = await Account.getGiverForClient(client);
       await giver.sendTo(rootAddr, 100_000_000_000);
       console.log(`Grams were transferred from giver to ${rootAddr}`);
-      await giver.sendTo(wrapperAddr, 100_000_000_000);
-      console.log(`Grams were transferred from giver to ${wrapperAddr}`);
     } else if (networkSelector == 1) {
       const giverNTDAddress = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).address;;
       const giverNTDKeys = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).keys;
-      const giverNTDAcc = new Account(GiverContract, {
+      const giverNTDAcc = new Account(GiverContractNTD, {
         address: giverNTDAddress,
         signer: giverNTDKeys,
         client,
@@ -64,7 +67,16 @@ async function main(client) {
       // Call `sendTransaction` function
       response = await giverNTDAcc.run("sendTransaction", {dest:rootAddr,value:20000000000,bounce:false});
       console.log("Giver send 20 ton to rootAddr:", response.decoded.output);
-    } else if (networkSelector == 2){console.log('Pls set giver for main.ton.dev');} else {console.log('networkSelector is incorrect');}
+    } else if (networkSelector == 2){
+      console.log('Pls set giver for main.ton.dev');
+    } else if (networkSelector == 3){
+    const giverRTDAddress = JSON.parse(fs.readFileSync('./GiverContractRTD.json',{encoding: "utf8"})).address;;
+    const giverRTDKeys = JSON.parse(fs.readFileSync('./GiverContractRTD.json',{encoding: "utf8"})).keys;
+    const giverRTDAcc = new Account(GiverContract, {address: giverRTDAddress,signer: giverRTDKeys,client,});
+    // Call `sendTransaction` function
+    response = await giverRTDAcc.run("sendTransaction", {dest:rootAddr,value:20000000000,bounce:false});
+    console.log("Giver send 20 ton to rootAddr:", response.decoded.output);
+  } else {console.log('networkSelector is incorrect');}
 
 
     let rootJson = JSON.stringify({address:rootAddr, keys:rootKeys});

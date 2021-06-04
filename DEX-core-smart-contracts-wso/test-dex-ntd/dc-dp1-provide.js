@@ -44,7 +44,7 @@ async function main(client) {
   console.log(clientKeys);
   console.log(clientAddr);
 
-  const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonUsdс,{encoding: "utf8"})).address;
+  const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonUsdc,{encoding: "utf8"})).address;
 
   console.log(pairAddr);
 

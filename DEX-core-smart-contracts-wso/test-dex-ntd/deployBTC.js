@@ -6,6 +6,7 @@ const { RootTokenContract } = require("./RootTokenContract.js");
 const { TONTokenWalletContract } = require("./TONTokenWallet.js");
 const { DEXRootCode } = require("./DEXRootCode.js");
 const { GiverContract } = require("./Giver.js");
+const { GiverContractNTD } = require("./GiverContract.js");
 const networks = ["http://localhost",'net.ton.dev','main.ton.dev','rustnet.ton.dev'];
 const hello = ["Hello localhost TON!","Hello dev net TON!","Hello main net TON!","Hello rust dev net TON!"];
 const networkSelector = process.env.NET_SELECTOR;
@@ -64,7 +65,7 @@ async function main(client) {
   } else if (networkSelector == 1) {
     const giverNTDAddress = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).address;;
     const giverNTDKeys = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).keys;
-    const giverNTDAcc = new Account(GiverContract, {
+    const giverNTDAcc = new Account(GiverContractNTD, {
       address: giverNTDAddress,
       signer: giverNTDKeys,
       client,
@@ -101,7 +102,7 @@ shard_block_id = (await client.processing.send_message({
   send_events: true,
 }, logEvents,
 )).shard_block_id;
-console.log(`Deploy rootUSDC message was sent.`);
+console.log(`Deploy rootBTC message was sent.`);
 
 // Monitor message delivery.
 // See more info about `wait_for_transaction` here

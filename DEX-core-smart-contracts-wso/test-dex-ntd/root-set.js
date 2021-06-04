@@ -19,11 +19,11 @@ async function logEvents(params, response_type) {
   // console.log(`response_type = ${JSON.stringify(response_type, null, 2)}`);
 }
 
-let extratonAddr = '0:c600270c8f92754ee3e158afe58222a764e7d43c084b49f16b7d4fafab07d664';
+let extratonAddr = '0:e6bd58b71f44adff798313edea05e05009593201c0bf77005d66617ef621d48c';
 
 async function main(client) {
   let response;
-  const pathJsonClient = './DEXClientContract.json';
+  const pathJsonClient = './DEXClientContract1.json';
   const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
 
   const rootAddr = JSON.parse(fs.readFileSync(pathJsonRoot,{encoding: "utf8"})).address;

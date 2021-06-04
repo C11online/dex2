@@ -50,7 +50,7 @@ async function main(client) {
   const rootKeysB = JSON.parse(fs.readFileSync(pathJsonUSDC,{encoding: "utf8"})).keys;
   const rootAddrB = JSON.parse(fs.readFileSync(pathJsonUSDC,{encoding: "utf8"})).address;
   const rootAccB = new Account(RootTokenContract, {address: rootAddrB,signer: rootKeysB,client,});
-  console.log("USDT root:", rootAddrB);
+  console.log("USDC root:", rootAddrB);
 
 
   const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
@@ -58,7 +58,7 @@ async function main(client) {
   const clientAcc = new Account(DEXClientContract, {address:clientAddr,signer:clientKeys,client,});
 
 
-  const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonUsdс,{encoding: "utf8"})).address;
+  const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonUsdc,{encoding: "utf8"})).address;
 
 
   response = await clientAcc.runLocal("rootWallet", {});
