@@ -22,16 +22,26 @@ const pathJsonPairBtcUsdt = './DEXPairContractBtcUsdt.json';
 const pathJsonPairEthUsdt = './DEXPairContractEthUsdt.json';
 const pathJsonPairBtcUsdc = './DEXPairContractBtcUsdc.json';
 const pathJsonPairEthUsdc = './DEXPairContractEthUsdc.json';
-
-const pathJsonPairTonBtc = './DEXPairContractTonBtc.json';
 const pathJsonPairTonEth = './DEXPairContractTonEth.json';
+const pathJsonPairTonBtc = './DEXPairContractTonBtc.json';
 const pathJsonPairUsdcUsdt = './DEXPairContractUsdcUsdt.json';
+const pathJsonPairTonDai = './DEXPairContractTonDai.json';
+const pathJsonPairEthDai = './DEXPairContractEthDai.json';
+const pathJsonPairBtcDai = './DEXPairContractBtcDai.json';
+const pathJsonPairUsdtDai = './DEXPairContractUsdtDai.json';
+const pathJsonPairUsdcDai = './DEXPairContractUsdcDai.json';
+const pathJsonPairEthBtc = './DEXPairContractEthBtc.json';
+const pathJsonPairBnbEth = './DEXPairContractBnbEth.json';
+
 
 const pathJsonWTON = './WTONdata.json';
 const pathJsonUSDT = './USDTdata.json';
 const pathJsonUSDC = './USDCdata.json';
 const pathJsonBTC = './BTCdata.json';
 const pathJsonETH = './ETHdata.json';
+const pathJsonDAI = './DAIdata.json';
+const pathJsonBNB = './BNBdata.json';
+
 
 function convert(number, decimal) {
   return Math.trunc(number)*(10**decimal) + Math.floor((number - Math.trunc(number))*(10**decimal));
@@ -83,6 +93,15 @@ async function main(client) {
   const rootAccE = new Account(RootTokenContract, {address: rootAddrE,signer: rootKeysE,client,});
   console.log("WTON root:", rootAddrE);
 
+  // const rootKeysF = JSON.parse(fs.readFileSync(pathJsonDAI,{encoding: "utf8"})).keys;
+  // const rootAddrF = JSON.parse(fs.readFileSync(pathJsonDAI,{encoding: "utf8"})).address;
+  // const rootAccF = new Account(RootTokenContract, {address: rootAddrF,signer: rootKeysF,client,});
+  // console.log("DAI root:", rootAddrE);
+
+  const rootKeysG = JSON.parse(fs.readFileSync(pathJsonBNB,{encoding: "utf8"})).keys;
+  const rootAddrG = JSON.parse(fs.readFileSync(pathJsonBNB,{encoding: "utf8"})).address;
+  const rootAccG = new Account(RootTokenContract, {address: rootAddrG,signer: rootKeysG,client,});
+  console.log("BNB root:", rootAddrG);
 
 
 
@@ -92,7 +111,7 @@ async function main(client) {
 
 
   response = await clientAcc.runLocal("rootWallet", {});
-  console.log("Contract reacted to your rootWallet:", response.decoded.output);
+  // console.log("Contract reacted to your rootWallet:", response.decoded.output);
 
   let walletRootA = response.decoded.output.rootWallet[rootAddrA];
   console.log("Contract reacted to your walletRootA:", walletRootA);
@@ -114,6 +133,14 @@ async function main(client) {
   console.log("Contract reacted to your walletRootE:", walletRootE);
   const walletAccE = new Account(TONTokenWalletContract, {address: walletRootE,client,});
 
+  // let walletRootF = response.decoded.output.rootWallet[rootAddrF];
+  // console.log("Contract reacted to your walletRootE:", walletRootF);
+  // const walletAccF = new Account(TONTokenWalletContract, {address: walletRootF,client,});
+
+  let walletRootG = response.decoded.output.rootWallet[rootAddrG];
+  console.log("Contract reacted to your walletRootE:", walletRootG);
+  const walletAccG = new Account(TONTokenWalletContract, {address: walletRootG,client,});
+
 
 
 
@@ -131,6 +158,21 @@ async function main(client) {
 
   response = await walletAccE.runLocal("balance", {_answer_id:0});
   console.log("WTON balance:", response.decoded.output);
+
+  // response = await walletAccF.runLocal("balance", {_answer_id:0});
+  // console.log("DAI balance:", response.decoded.output);
+
+  response = await walletAccG.runLocal("balance", {_answer_id:0});
+  console.log("BNB balance:", response.decoded.output);
+
+
+  response = await walletAccG.runLocal("getDetails", {_answer_id:0});
+  console.log("BNB getDetails:", response.decoded.output);
+
+  response = await walletAccD.runLocal("getDetails", {_answer_id:0});
+  console.log("ETH getDetails:", response.decoded.output);
+
+
 
 
 

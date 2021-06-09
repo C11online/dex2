@@ -175,6 +175,18 @@
 			]
 		},
 		{
+			"name": "sendTokens",
+			"inputs": [
+				{"name":"tokenRoot","type":"address"},
+				{"name":"to","type":"address"},
+				{"name":"tokens","type":"uint128"},
+				{"name":"grams","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"sendTokenStatus","type":"bool"}
+			]
+		},
+		{
 			"name": "rootDEX",
 			"inputs": [
 			],

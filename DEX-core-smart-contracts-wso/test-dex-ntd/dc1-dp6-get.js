@@ -47,8 +47,9 @@ async function logEvents(params, response_type) {
 
 async function main(client) {
   let responce;
+  const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonEth,{encoding: "utf8"})).address;
-  const pairAcc = new Account(DEXPairContract, {address: pairAddr,client,});
+  const pairAcc = new Account(DEXPairContract, {address: pairAddr,signer:clientKeys, client,});
 
   response = await pairAcc.runLocal("rootDEX", {});
   console.log("Contract reacted to your rootDEX:", response.decoded.output);
@@ -83,7 +84,6 @@ async function main(client) {
   console.log("Pair walletAccB reacted to your balance:", response.decoded.output);
 
 
-  const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   const clientAddr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).address;
   const clientAcc = new Account(DEXClientContract, {address:clientAddr,signer:clientKeys,client,});
   response = await clientAcc.runLocal("rootWallet", {});
@@ -113,6 +113,22 @@ async function main(client) {
 
   response = await pairAcc.runLocal("counterCallback", {});
   console.log("Contract reacted to your counterCallback:", response.decoded.output);
+
+  response = await pairAcc.runLocal("getCallback", {id:9});
+  console.log("Contract reacted to your getCallback:", response.decoded.output);
+
+  response = await pairAcc.runLocal("processingStatus", {});
+  console.log("Contract reacted to your processingStatus:", response.decoded.output);
+
+  response = await pairAcc.runLocal("processingData", {});
+  console.log("Contract reacted to your processingData:", response.decoded.output);
+
+  response = await pairAcc.runLocal("processingDest", {});
+  console.log("Contract reacted to your processingDest:", response.decoded.output);
+
+
+
+
 
 
 }

@@ -48,8 +48,9 @@ async function logEvents(params, response_type) {
 
 async function main(client) {
   let responce;
+  const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairEthUsdc,{encoding: "utf8"})).address;
-  const pairAcc = new Account(DEXPairContract, {address: pairAddr,client,});
+  const pairAcc = new Account(DEXPairContract, {address: pairAddr,signer:clientKeys,client,});
 
   response = await pairAcc.runLocal("rootDEX", {});
   console.log("Contract reacted to your rootDEX:", response.decoded.output);
@@ -84,7 +85,6 @@ async function main(client) {
   console.log("Pair walletAccB reacted to your balance:", response.decoded.output);
 
 
-  const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   const clientAddr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).address;
   const clientAcc = new Account(DEXClientContract, {address:clientAddr,signer:clientKeys,client,});
   response = await clientAcc.runLocal("rootWallet", {});

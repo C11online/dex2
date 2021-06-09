@@ -21,7 +21,7 @@ contract DEXClient is ITokensReceivedCallback, IDEXClient, IDEXConnect {
 
   // Grams constants
   uint128 constant GRAMS_CONNECT_PAIR = 500000000;
-  uint128 constant GRAMS_SET_CALLBACK_ADDR = 15000000;
+  uint128 constant GRAMS_SET_CALLBACK_ADDR = 100000000;
   uint128 constant GRAMS_SWAP = 500000000;
   uint128 constant GRAMS_PROCESS_LIQUIDITY = 500000000;
   uint128 constant GRAMS_RETURN_LIQUIDITY = 500000000;
@@ -322,8 +322,14 @@ contract DEXClient is ITokensReceivedCallback, IDEXClient, IDEXConnect {
     payload_arg2 = cc.payload_arg2;
   }
 
-  function getBalance() public pure checkOwnerAndAccept returns (uint128 balance){
-    balance = address(this).balance;
+  // Function for get this TON gramms balance
+  function thisBalance() private inline  pure returns (uint128) {
+    return address(this).balance;
+  }
+
+  // Function for external get this contract TON gramms balance
+  function getBalance() public pure responsible returns (uint128) {
+    return { value: 0, bounce: false, flag: 64 } thisBalance();
   }
 
   // Function to create DEXpair by DEXclient via DEXroot.
@@ -347,6 +353,20 @@ contract DEXClient is ITokensReceivedCallback, IDEXClient, IDEXConnect {
     require (!(address(this).balance < grammsTotal),105);
     TvmCell body = tvm.encodeBody(IDEXRoot(rootDEX).createDEXpair, root0,root1,pairSoArg,connectorSoArg0,connectorSoArg1,rootSoArg,rootName,rootSymbol,rootDecimals,grammsForPair,grammsForRoot,grammsForConnector,grammsForWallet);
     rootDEX.transfer({value:grammsTotal, bounce:false, flag: 1, body:body});
+  }
+
+  // Function to send Tokens.
+  function sendTokens(address tokenRoot, address to, uint128 tokens, uint128 grams) public checkOwnerAndAccept view returns (bool sendTokenStatus){
+    sendTokenStatus = false;
+    if (rootConnector[tokenRoot] != address(0)) {
+      address connector = rootConnector[tokenRoot];
+      TvmBuilder builder;
+      builder.store(uint8(4), address(this), rootWallet[tokenRoot]);
+      TvmCell payload = builder.toCell();
+      TvmCell body = tvm.encodeBody(IDEXConnector(connector).transfer, to, tokens, payload);
+      connector.transfer({value: grams, bounce:true, body:body});
+      sendTokenStatus = true;
+    }
   }
 
   // Function to receive plain transfers.

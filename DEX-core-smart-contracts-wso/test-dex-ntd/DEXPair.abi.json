@@ -109,9 +109,10 @@
 		{
 			"name": "getBalance",
 			"inputs": [
+				{"name":"_answer_id","type":"uint32"}
 			],
 			"outputs": [
-				{"name":"balance","type":"uint128"}
+				{"name":"value0","type":"uint128"}
 			]
 		},
 		{

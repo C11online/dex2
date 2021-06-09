@@ -51,9 +51,9 @@ async function main(client) {
   const clientAddr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).address;
   const clientAcc = new Account(DEXClientContract, {address:clientAddr,signer:clientKeys,client,});
 
-  let tonAmount = 1000000000000000;
+  let tonAmount = 10000000000000;
 
-  let ethAmount = 145054505598;
+  let ethAmount = 1450000000;
 
   const pairAddr = JSON.parse(fs.readFileSync(pathJsonPairTonEth,{encoding: "utf8"})).address;
 
