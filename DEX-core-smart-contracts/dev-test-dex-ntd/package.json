@@ -4,7 +4,9 @@
     "description": "Radiance DEX core smartcontracts",
     "main": "",
     "scripts": {
-        "start": "index.js"
+        "start": "index.js",
+        "test:swapA": "mocha dc3-dp0-swapA.test.js --delay",
+        "test:swapB": "mocha dc3-dp0-swapB.test.js --delay"
     },
     "keywords": [],
     "author": "",
@@ -20,7 +22,8 @@
         "dotenv": "^9.0.2",
         "express": "^4.17.1",
         "hex2ascii": "^0.0.3",
-        "mocha": "^9.0.0"
+        "mocha": "^9.0.0",
+        "mocha-logger": "^1.0.7"
     },
     "devDependencies": {
         "@types/node": "^14.14.31"

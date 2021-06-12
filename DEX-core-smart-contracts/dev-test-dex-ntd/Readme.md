@@ -1,3 +1,10 @@
+# Tests DefiSpace DEX (stage2)
+
+## `cd <your path to dex2>/DEX-core-smart-contracts/dev-test-dex-ntd`
+## `npm install`
+## `npm run test:swapA`
+## `npm run test:swapB`
+
 # Smartcontracts and js scripts for deploy DefiSpace DEX (stage2)
 
 ## tvm_linker commands for make TVMcell ready code  of smartcontracts for DEXRoot

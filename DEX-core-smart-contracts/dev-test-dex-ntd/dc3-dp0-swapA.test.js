@@ -11,11 +11,13 @@ const networks = ["http://localhost",'net.ton.dev','main.ton.dev','rustnet.ton.d
 const hello = ["Hello localhost TON!","Hello dev net TON!","Hello main net TON!","Hello rust dev net TON!"];
 const networkSelector = process.env.NET_SELECTOR;
 
-var assert = require('assert');
-const { expect } = require('chai')
+const assert = require('assert');
+const { expect } = require('chai');
+const logger = require('mocha-logger');
+
 const fs = require('fs');
 const pathJsonRoot = './DEXRootContract.json';
-const pathJsonClient = './DEXClientContract2.json';
+const pathJsonClient = './DEXClientContract3.json';
 
 const pathJsonPairTonUsdt = './DEXPairContractTonUsdt.json';
 const pathJsonPairTonUsdc = './DEXPairContractTonUsdc.json';
@@ -44,6 +46,7 @@ const pathJsonDAI = './DAIdata.json';
 const pathJsonBNB = './BNBdata.json';
 
 
+let qtyA = 1000000000000;
 let currentRootA = pathJsonWTON;
 let currentRootB = pathJsonUSDT;
 let currentPairPath = pathJsonPairTonUsdt;
@@ -55,6 +58,12 @@ let balanceClientB2;
 
 let reserveA;
 let reserveB;
+let reserveA1;
+let reserveB1;
+
+let arr;
+let grammsBefore;
+let grammsAfter;
 
 TonClient.useBinaryLibrary(libNode);
 
@@ -63,9 +72,8 @@ function getAmountOut(amountIn, rootIn, rootOut) {
   let amountInWithFee = amountIn * 997;
   let numerator = amountInWithFee * rootOut;
   let denominator = amountInWithFee + rootIn * 1000;
-  return Math.round(numerator/denominator);
+  return Math.floor(numerator/denominator);
 }
-
 
 async function logEvents(params, response_type) {
   // console.log(`params = ${JSON.stringify(params, null, 2)}`);
@@ -77,16 +85,11 @@ async function main(client) {
   const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   const clientAddr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).address;
   const clientAcc = new Account(DEXClientContract, {address:clientAddr,signer:clientKeys,client,});
-
   // console.log(clientKeys);
-  console.log(clientAddr);
-
+  // console.log(clientAddr);
   const pairAddr = JSON.parse(fs.readFileSync(currentPairPath,{encoding: "utf8"})).address;
   const pairAcc = new Account(DEXPairContract, {address: pairAddr, client,});
-
-
-  console.log(pairAddr);
-
+  // console.log(pairAddr);
   response = await pairAcc.runLocal("rootA", {});
   let rootA = response.decoded.output.rootA;
   response = await pairAcc.runLocal("rootB", {});
@@ -94,8 +97,15 @@ async function main(client) {
   response = await pairAcc.runLocal("balanceReserve", {});
   reserveA = response.decoded.output.balanceReserve[rootA];
   reserveB = response.decoded.output.balanceReserve[rootB];
-  console.log("balanceReserveA: ", reserveA," / balanceReserveB: ", reserveB);
-
+  // console.log("balanceReserveA: ", reserveA," / balanceReserveB: ", reserveB);
+  logger.log("rate B / A before: ", reserveB / reserveA);
+  logger.log('swapA qty:'+qtyA);
+  logger.log("% qtyA from reserveA: ", (qtyA / (reserveA/100)).toString());
+  let idealQtyB =  Math.round(((qtyA*997/1000)*reserveB) / reserveA);
+  logger.log("((qtyA-fee(0.3%))*reserveB) / reserveA): ", idealQtyB);
+  let getAmountOutResult = getAmountOut(qtyA, reserveA, reserveB);
+  logger.log("computed getAmountOut: ", getAmountOutResult);
+  logger.log("shift %: ", idealQtyB / getAmountOutResult);
   response = await clientAcc.runLocal("rootWallet", {});
   let clientWalletA = response.decoded.output.rootWallet[rootA];
   let clientWalletB = response.decoded.output.rootWallet[rootB];
@@ -105,13 +115,14 @@ async function main(client) {
   balanceClientA1 = response.decoded.output.value0;
   response = await walletAccB.runLocal("balance", {_answer_id:0});
   balanceClientB1 = response.decoded.output.value0;
-  console.log("balanceClientA: ", balanceClientA1," / balanceClientB: ", balanceClientB1);
+  // console.log("balanceClientA: ", balanceClientA1," / balanceClientB: ", balanceClientB1);
+  response = await clientAcc.runLocal("getBalance", {_answer_id:0});
+  grammsBefore = response.decoded.output.value0;
+  logger.log("client TON gramm balance before:", grammsBefore);
+  responce = await clientAcc.run("processSwapA", {pairAddr:pairAddr,qtyA:qtyA});
+  // console.log("Contract reacted to your processSwapA:", responce.decoded.output);
 
-
-
-  responce = await clientAcc.run("processSwapA", {pairAddr:pairAddr,qtyA:1000});
-  console.log("Contract reacted to your processSwapA:", responce.decoded.output);
-
+  return responce.decoded.output.processSwapStatus;
 }
 
 
@@ -120,18 +131,19 @@ async function main2(client) {
   const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   const clientAddr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).address;
   const clientAcc = new Account(DEXClientContract, {address:clientAddr,signer:clientKeys,client,});
-  console.log(clientAddr);
+  // console.log(clientAddr);
   const pairAddr = JSON.parse(fs.readFileSync(currentPairPath,{encoding: "utf8"})).address;
   const pairAcc = new Account(DEXPairContract, {address: pairAddr, client,});
-  console.log(pairAddr);
+  // console.log(pairAddr);
   response = await pairAcc.runLocal("rootA", {});
   let rootA = response.decoded.output.rootA;
   response = await pairAcc.runLocal("rootB", {});
   let rootB = response.decoded.output.rootB;
   response = await pairAcc.runLocal("balanceReserve", {});
-  let reserveA = response.decoded.output.balanceReserve[rootA];
-  let reserveB = response.decoded.output.balanceReserve[rootB];
-  console.log("balanceReserveA: ", reserveA," / balanceReserveB: ", reserveB);
+  reserveA1 = response.decoded.output.balanceReserve[rootA];
+  reserveB1 = response.decoded.output.balanceReserve[rootB];
+  // console.log("balanceReserveA: ", reserveA1," / balanceReserveB: ", reserveB1);
+  logger.log("rate B / A after: : ", reserveB1 / reserveA1);
   response = await clientAcc.runLocal("rootWallet", {});
   let clientWalletA = response.decoded.output.rootWallet[rootA];
   let clientWalletB = response.decoded.output.rootWallet[rootB];
@@ -141,36 +153,42 @@ async function main2(client) {
   balanceClientA2 = response.decoded.output.value0;
   response = await walletAccB.runLocal("balance", {_answer_id:0});
   balanceClientB2 = response.decoded.output.value0;
-  console.log("balanceClientA: ", balanceClientA2," / balanceClientB: ", balanceClientB2);
-
+  // console.log("balanceClientA: ", balanceClientA2," / balanceClientB: ", balanceClientB2);
   let deltaA = balanceClientA1 - balanceClientA2;
   let deltaB = balanceClientB2 - balanceClientB1;
-  console.log("deltaClientA: ", deltaA," / deltaClientB: ", deltaB);
+  // console.log("deltaClientA: ", deltaA," / deltaClientB: ", deltaB);
   let checkB = getAmountOut(deltaA, reserveA, reserveB)
-  console.log("deltaClientA: ", deltaA," / deltaClientB: ", checkB);
-    // it('Should check that swapA is correct', function () {
-    // const var0 = await this.yvWETH.emergencyShutdown();
-    // expect(deltaB == checkB).to.be.true;
-  // });
+  // console.log("deltaClientA: ", deltaA," / deltaClientB: ", checkB);
+  response = await clientAcc.runLocal("getBalance", {_answer_id:0});
+  grammsAfter = response.decoded.output.value0;
+  logger.log("client TON gramm balance after:", grammsAfter);
+  logger.log("swapB operation cost:", (grammsBefore-grammsAfter)/10**9);
 
-  describe("swap tests", function() {
-
-  it("Should check that swapA is correct", function() {
-    expect(deltaB == checkB).to.be.true;
-  });
-
-});
-
+  return [deltaB,checkB];
 }
+
+
+setTimeout(function() {
+describe('SwapA test', async function() {
+    it('should check equal client balanceB changed and computed getAmountOut', async function () {
+      logger.log('the array to be checked: ', arr);
+  		expect(arr[0]).to.equal(arr[1]);
+    });
+});
+  run();
+}, 30000);
 
 
 (async () => {
   const client = new TonClient({network: { endpoints: [networks[networkSelector]],},});
   try {
     console.log(hello[networkSelector]);
-    await main(client);
-    await main2(client);
-    process.exit(0);
+    const statusSwap = await main(client);
+    logger.log('swapA status: '+statusSwap);
+    arr = await main2(client);
+    logger.log('client balanceB changed, computed getAmountOut', arr);
+
+    // process.exit(0);
   } catch (error) {
     if (error.code === 504) {
       console.error(`Network is inaccessible. Pls check connection`);
