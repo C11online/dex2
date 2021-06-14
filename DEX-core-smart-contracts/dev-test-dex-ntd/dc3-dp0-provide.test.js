@@ -46,8 +46,8 @@ const pathJsonDAI = './DAIdata.json';
 const pathJsonBNB = './BNBdata.json';
 
 
-let qtyA = 999999993;
-let qtyB = 298024551;
+let qtyA = 100000000000;
+let qtyB = 30000000000;
 
 let currentRootA = pathJsonWTON;
 let currentRootB = pathJsonUSDT;
@@ -102,7 +102,7 @@ function qtyForProvide(amountA, amountB, reserveA, reserveB) {
   let crmin = Math.min(reserveA, reserveB);
   let crmax = Math.max(reserveA, reserveB);
   let crquotient = ~~(crmax/crmin);
-  let crremainder = crmax % crmin;
+  let crremainder = crmax%crmin;
   let amountMin = Math.min(minAmountA,minAmountB)+1;
   let amountOther = amountMin * crquotient + (amountMin * crremainder) / crmin ;
   let acceptForProvideA = minAmountA < minAmountB ? amountMin : amountOther;
@@ -119,7 +119,7 @@ function acceptForProvide(amountA, amountB, reserveA, reserveB) {
   let crmin = Math.min(reserveA, reserveB);
   let crmax = Math.max(reserveA, reserveB);
   let crquotient = ~~(crmax/crmin);
-  let crremainder = crmax % crmin;
+  let crremainder = crmax%crmin;
   let amountMin = Math.min(minAmountA,minAmountB);
   let amountOther = amountMin * crquotient + (amountMin * crremainder) / crmin ;
   let acceptForProvideA = minAmountA < minAmountB ? amountMin : amountOther;
