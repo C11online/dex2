@@ -46,7 +46,7 @@ const pathJsonDAI = './DAIdata.json';
 const pathJsonBNB = './BNBdata.json';
 
 
-let qtyA = 1000000000000;
+let qtyA = 50000000000000;
 let currentRootA = pathJsonWTON;
 let currentRootB = pathJsonUSDT;
 let currentPairPath = pathJsonPairTonUsdt;
@@ -64,6 +64,10 @@ let reserveB1;
 let arr;
 let grammsBefore;
 let grammsAfter;
+
+let timeBefore;
+let timeAfter;
+let swapTime;
 
 TonClient.useBinaryLibrary(libNode);
 
@@ -85,10 +89,13 @@ async function main(client) {
   const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   const clientAddr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).address;
   const clientAcc = new Account(DEXClientContract, {address:clientAddr,signer:clientKeys,client,});
+  logger.log("DEX root address: ", dexrootAddr);
+  logger.log("current dexclient address: ", clientAddr);
   // console.log(clientKeys);
   // console.log(clientAddr);
   const pairAddr = JSON.parse(fs.readFileSync(currentPairPath,{encoding: "utf8"})).address;
   const pairAcc = new Account(DEXPairContract, {address: pairAddr, client,});
+  logger.log("current dexpair address: ", pairAddr);
   // console.log(pairAddr);
   response = await pairAcc.runLocal("rootA", {});
   let rootA = response.decoded.output.rootA;
@@ -119,6 +126,7 @@ async function main(client) {
   response = await clientAcc.runLocal("getBalance", {_answer_id:0});
   grammsBefore = response.decoded.output.value0;
   logger.log("client TON gramm balance before:", grammsBefore);
+  timeBefore = Date.now();
   responce = await clientAcc.run("processSwapA", {pairAddr:pairAddr,qtyA:qtyA});
   // console.log("Contract reacted to your processSwapA:", responce.decoded.output);
 
@@ -127,6 +135,9 @@ async function main(client) {
 
 
 async function main2(client) {
+  timeAfter = Date.now();
+  timeSwap = timeAfter - timeBefore;
+  logger.log("swap speed ms:", timeSwap);
   let responce;
   const clientKeys = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).keys;
   const clientAddr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"})).address;

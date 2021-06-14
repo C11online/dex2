@@ -6,7 +6,9 @@
     "scripts": {
         "start": "index.js",
         "test:swapA": "mocha dc3-dp0-swapA.test.js --delay",
-        "test:swapB": "mocha dc3-dp0-swapB.test.js --delay"
+        "test:swapB": "mocha dc3-dp0-swapB.test.js --delay",
+        "test:provide": "mocha dc3-dp0-provide.test.js --delay"
+
     },
     "keywords": [],
     "author": "",
