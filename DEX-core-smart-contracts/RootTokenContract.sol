@@ -18,7 +18,6 @@ import "./interfaces/ITransferOwner.sol";
 import "./libraries/RootTokenContractErrors.sol";
 import "./interfaces/IVersioned.sol";
 
-
 /*
     @title FT token root contract
 */
