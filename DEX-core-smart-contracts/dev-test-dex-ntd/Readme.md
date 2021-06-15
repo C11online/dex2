@@ -1,10 +1,62 @@
 # Tests DefiSpace DEX (stage2)
 
-* `cd <your path to dex2>/DEX-core-smart-contracts/dev-test-dex-ntd/`
-* `npm install`
-* `npm run test:swapA`
-* `npm run test:swapB`
+### `cd <your path to dex2>/DEX-core-smart-contracts/dev-test-dex-ntd/`
+### `npm install`
+### `npm run test:swapA`
+   * on line 1 set quantity A nanoTokens for swap `const qtyA = 5000000000000;`
+   * at the end of the test:
+   `    - DEX root address:  0:80b247a393f0b94007cf7d7f97a916924739334294950088548f70cb7f2a0369
+        - current dexclient address:  0:8ca8a693957ec10611289da900050a6770391c13d8920879a169453fff3ace14
+        - current dexpair address:  0:81bbfb35a41dddcbe467b18ab8344ca89cecb559df75b51889c26adde0a101cd
+        - rate B / A before:  0.37742788143517875
+        - swapA qty:5000000000000
+        - % qtyA from reserveA:  1.1726634935486568
+        - ((qtyA-fee(0.3%))*reserveB) / reserveA):  1881477988954
+        - computed getAmountOut:  1859734981054
+        - shift %:  1.1691455030693305
+        - client TON gramm balance before: 21840159601
+        - swapA status: true
+        - swap speed ms: 10735
+        - rate B / A after: :  0.36874209090981647
+        - client TON gramm balance after: 21639674604
+        - swapB operation cost: 0.200484997
+        - client balanceB changed, computed getAmountOut 1859734981054,1859734981054
+
+      SwapA test
+        - the array to be checked:  1859734981054,1859734981054
+        ✔ should check equal client balanceB changed and computed getAmountOut
+
+      1 passing (12ms)
+`
+## `npm run test:swapB`
+* on line 1 set quantity B nanoTokens for swap `const qtyB = 3000000000000;`
+* at the end of the test:
+`   - DEX root address:  0:80b247a393f0b94007cf7d7f97a916924739334294950088548f70cb7f2a0369
+    - current dexclient address:  0:8ca8a693957ec10611289da900050a6770391c13d8920879a169453fff3ace14
+    - current dexpair address:  0:81bbfb35a41dddcbe467b18ab8344ca89cecb559df75b51889c26adde0a101cd
+    - rate A / B before:  2.71192257312597
+    - swapB qty:3000000000000
+    - % qtyB from reserveB:  1.885987275033922
+    - ((qtyB-fee(0.3%))*reserveB) / reserveA):  8111360416220
+    - computed getAmountOut:  7961655081898
+    - shift %:  1.8803293132150003
+    - client TON gramm balance before: 21639674604
+    - swapB status: true
+    - swap speed ms: 11010
+    - rate A / B after: :  2.6125973849883257
+    - client TON gramm balance after: 21439470051
+    - swapB operation cost: 0.200204553
+    - client balanceA changed, computed getAmountOut 7961655081898,7961655081898
+
+  SwapB test
+    - the array to be checked:  7961655081898,7961655081898
+    ✔ should check equal client balanceA changed and computed getAmountOut
+
+  1 passing (11ms)
+`
+
 * `npm run test:provide`
+* `npm run test:return`
 
 # Smartcontracts and js scripts for deploy DefiSpace DEX (stage2)
 

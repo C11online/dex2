@@ -7,3 +7,4 @@
 * `npm run test:swapA`
 * `npm run test:swapB`
 * `npm run test:provide`
+* `npm run test:return`
