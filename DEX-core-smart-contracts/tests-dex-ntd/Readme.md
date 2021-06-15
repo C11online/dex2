@@ -1,6 +1,8 @@
-# Tests DefiSpace DEX (stage2)
+# DEX-core-smart-contracts
 
-### `cd <your path to dex2>/DEX-core-smart-contracts/dev-test-dex-ntd/`
+## tests for  DEX-core-smart-contracts
+
+### `cd ~/dex2/DEX-core-smart-contracts/tests-dex-ntd`
 ### `npm install`
 ### `npm run test:swapA`
    * line 1 set quantity A nanoTokens for swap `const qtyA = 5000000000000;`
@@ -25,7 +27,7 @@
         - the array to be checked:  1859734981054,1859734981054
         ✔ should check equal client balanceB changed and computed getAmountOut
 
-## `npm run test:swapB`
+### `npm run test:swapB`
 * line 1 set quantity B nanoTokens for swap `const qtyB = 3000000000000;`
 * at the end of the test:
     - DEX root address:  0:80b247a393f0b94007cf7d7f97a916924739334294950088548f70cb7f2a0369
@@ -48,7 +50,7 @@
     - the array to be checked:  7961655081898,7961655081898
     ✔ should check equal client balanceA changed and computed getAmountOut
 
-## `npm run test:provide`
+### `npm run test:provide`
 * line 1 set quantity A nanoTokens for provide liquidity `const qtyA = 100000000000;`
 * line 2 set quantity B nanoTokens for provide liquidity `const qtyB = 30000000000;`
 * at the end of the test:
@@ -81,7 +83,7 @@
     - the array to be checked:  29803908426 29803908426
     ✔ should check equal client balanceAB changed, expected qty LP tokens
 
-* `npm run test:return`
+### `npm run test:return`
 * line 1 set quantity burning AB nanoTokens for return liquidity `let qtyAB = 30000000000`
 * at the end of the test:
    - reserveA before:  423827752028432
@@ -117,9 +119,9 @@
    - the array to be checked:  30197381736 30197381736
    ✔ should check equal client balanceB changed, expected receiving qtyB
 
-# Smartcontracts and js scripts for deploy DefiSpace DEX (stage2)
+## Smartcontracts and js scripts for deploy DefiSpace DEX (stage2)
 
-## tvm_linker commands for make TVMcell ready code  of smartcontracts for DEXRoot
+### tvm_linker commands for make TVMcell ready code  of smartcontracts for DEXRoot
 * `<your path to>`/tvm_linker decode --tvc DEXConnector.tvc | grep code: | cut -c 8- > DEXConnector.txt
 * `<your path to>`/tvm_linker decode --tvc DEXClient.tvc | grep code: | cut -c 8- > DEXClient.txt
 * `<your path to>`/tvm_linker decode --tvc DEXPair.tvc | grep code: | cut -c 8- > DEXPair.txt
@@ -128,31 +130,31 @@
 
 Copy and paste this into `DEXRootCode.js`
 
-## npm install
+### npm install
 install dependencies
 
-## node deployWTON
+### node deployWTON
 address and keys will written to `WTONdata.json`
 
-## node deployUSDT
+### node deployUSDT
 address and keys will written to `USDTdata.json`
 
-## node deployUSDC
+### node deployUSDC
 address and keys will written to `USDCdata.json`
 
-## node deployBTC
+### node deployBTC
 address and keys will written to `BTCdata.json`
 
-## node deployETH
+### node deployETH
 address and keys will written to `ETHdata.json`
 
-## node root-deploy
+### node root-deploy
 address and keys for DEX Root will written to `DEXRootContract.json`
 
-## node dc-predeploy
+### node dc-predeploy
 address, keys and sharding optimization argument(ClientSoArg) for DEX Client will written to `DEXClientContract.json`
 
-## node giver-deploy
+### node giver-deploy
 deploy Giver.sol with 100 TONs which will pay for DEXclient deploy, keys are the same from DEX Client
 
 ## node giver-send
