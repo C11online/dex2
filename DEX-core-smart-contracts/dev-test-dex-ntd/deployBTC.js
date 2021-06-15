@@ -28,8 +28,8 @@ function toHex(input) {
   return String(output);
 }
 
-const name = toHex("freeton BTC");
-const symbol = toHex("fBTC");
+const name = toHex("Wrapped BTC");
+const symbol = toHex("WBTC");
 const decimals = "9";
 
 async function logEvents(params, response_type) {

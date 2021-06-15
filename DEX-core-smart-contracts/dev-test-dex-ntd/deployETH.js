@@ -26,8 +26,8 @@ function toHex(input) {
   return String(output);
 }
 
-const name = toHex("freeton ETH");
-const symbol = toHex("fETH");
+const name = toHex("Wrapped Ether");
+const symbol = toHex("WETH");
 const decimals = "9";
 
 async function logEvents(params, response_type) {

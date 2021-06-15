@@ -37,7 +37,7 @@ async function main(client) {
 
 
 
-  let k = 1;
+  let k = 5;
   response = await clientAcc.runLocal("getAllDataPreparation", {});
   let pair = response.decoded.output.pairKeysR[k];
   response = await clientAcc.runLocal("pairs", {});
@@ -59,7 +59,7 @@ async function main(client) {
 
   let connectorSoArg0;
   status = false;
-  n = 228;
+  n = 1373;
   while (!status) {
     response = await clientAcc.runLocal("getConnectorAddress", {_answer_id:0,connectorSoArg:n});
     let connectorAddr = response.decoded.output.value0;

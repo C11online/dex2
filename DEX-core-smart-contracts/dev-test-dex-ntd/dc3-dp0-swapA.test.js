@@ -46,7 +46,7 @@ const pathJsonDAI = './DAIdata.json';
 const pathJsonBNB = './BNBdata.json';
 
 
-let qtyA = 50000000000000;
+let qtyA = 500000000000;
 let currentRootA = pathJsonWTON;
 let currentRootB = pathJsonUSDT;
 let currentPairPath = pathJsonPairTonUsdt;
