@@ -1,4 +1,4 @@
-const qtyA = 5000000000000;
+const qtyA = 1000000000;
 const {TonClient, abiContract, signerKeys} = require("@tonclient/core");
 const { libNode } = require("@tonclient/lib-node");
 const { Account } = require("@tonclient/appkit");
