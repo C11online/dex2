@@ -1,4 +1,4 @@
-# DEX-core-smart-contracts description
+# DEX-core-smart-contracts
 
 ## Glossary
 from https://github.com/radianceteam/dex/blob/main/Radiance%20DEX%20stage%201.pdf
@@ -14,19 +14,19 @@ from https://github.com/radianceteam/dex/blob/main/Radiance%20DEX%20stage%201.pd
 ![DEX-core-smart-contracts-architecture](DEX-core-smart-contracts-architecture.png)
 https://docs.google.com/drawings/d/176G8UEKKl_HBiC55Fq_2GYG0pdHdxxJrvAhbCLuFzhM/edit?usp=sharing
 
-# DEX-core-smart-contracts tests
+## DEX-core-smart-contracts tests
 
-## before
+### before
 
-### `git clone git@github.com:radianceteam/dex2.git`
-### `cd ~/dex2/DEX-core-smart-contracts/tests-dex-ntd`
-### `npm install`
-### `cat selector > .env`
+#### `git clone git@github.com:radianceteam/dex2.git`
+#### `cd ~/dex2/DEX-core-smart-contracts/tests-dex-ntd`
+#### `npm install`
+#### `cat selector > .env`
 
-## operation tests for  DEX-core-smart-contracts
+### operation tests for  DEX-core-smart-contracts
 Tests for dex operations: swap tokenA / tokenB, swap tokenB / tokenA, provde liquidity and return liquidity. During tests observe that the change in the DEX client's wallet balances during operations is equal to the mathematics embedded in the smart contract.
 
-### `npm run test:swapA`
+#### `npm run test:swapA`
 * before run can change on line`1` of `dcLT-dp0-swapA.test.js` swap qty `const qtyA = 5000000000000;`
 * after the test:
   - DEX root address:  0:fcbf50fa63a7121565bb8dec1cbb7e75c8e7f7d1222cd4a827ffcb86fbb3fc42
@@ -49,7 +49,7 @@ Tests for dex operations: swap tokenA / tokenB, swap tokenB / tokenA, provde liq
   - the array to be checked:  3788108678,3788108678
   ✔ should check equal client balanceB changed and computed getAmountOut
 
-### `npm run test:swapB`
+#### `npm run test:swapB`
 * before run can change on line`1` of `dcLT-dp0-swapB.test.js` swap qty `const qtyB = 3000000000;`
 * after the test:
   - DEX root address:  0:fcbf50fa63a7121565bb8dec1cbb7e75c8e7f7d1222cd4a827ffcb86fbb3fc42
@@ -72,7 +72,7 @@ Tests for dex operations: swap tokenA / tokenB, swap tokenB / tokenA, provde liq
   - the array to be checked:  7872081889,7872081889
   ✔ should check equal client balanceA changed and computed getAmountOut
 
-### `npm run test:provide`
+#### `npm run test:provide`
 * before run can change on line`1` of `dcLT-dp0-provide.test.js` swap qty `const qtyA = 100000000000;`
 * before run can change on line`2` of `dcLT-dp0-provide.test.js` swap qty `const qtyB = 30000000000;`
 * after the test:
@@ -105,7 +105,7 @@ Tests for dex operations: swap tokenA / tokenB, swap tokenB / tokenA, provde liq
   - the array to be checked:  30000361325 30000361325
   ✔ should check equal client balanceAB changed, expected qty LP tokens
 
-### `npm run test:return`
+#### `npm run test:return`
 * before run can change on line`1` of `dcLT-dp0-return.test.js` burning qty `let qtyAB = 30000000000;`
 * after the test:
   - reserveA before:  2000214214783629
@@ -141,11 +141,11 @@ Tests for dex operations: swap tokenA / tokenB, swap tokenB / tokenA, provde liq
   - the array to be checked:  29999638678 29999638678
   ✔ should check equal client balanceB changed, expected receiving qtyB
 
-## load test for  DEX-core-smart-contracts
+### load test for  DEX-core-smart-contracts
 Testing several simultaneous swaps to observe their parallel execution from different DEX clients smart contract to one DEX pair smart contract, during this test each script add msgs load about 0.5 - 1 msg/sec. During test observe stable DEXpair working under load level about 5-10  msg/sec and average swap speed 10 sec, which means that concurrent requests will be processed correctly
 
-### in separate console windows `npm run test:load1`,then ... ,then `npm run test:load10`
-### `npm run test:load1`
+#### in separate console windows `npm run test:load1`,then ... ,then `npm run test:load10`
+#### `npm run test:load1`
 * before run can change on line`1` of `dcLT-dp0-swaptest-client0.js` token A qty for one swap`const qtyA = 10000000000;`
 * before run can change on line`2` of `dcLT-dp0-swaptest-client0.js` token B qty for one swap `const qtyB = 3783810000;`
 * before run can change on line`3` of `dcLT-dp0-swaptest-client0.js` iteration qty `const testIteration = 200;`
@@ -191,29 +191,29 @@ Testing several simultaneous swaps to observe their parallel execution from diff
 
   ... and then script make next iteration
 
-### `npm run test:load2`
+#### `npm run test:load2`
 * same settings as for `npm run test:load1`
 
-### `npm run test:load3`
+#### `npm run test:load3`
 * same settings as for `npm run test:load1`
 
-### `npm run test:load4`
+#### `npm run test:load4`
 * same settings as for `npm run test:load1`
 
-### `npm run test:load5`
+#### `npm run test:load5`
 * same settings as for `npm run test:load1`
 
-### `npm run test:load6`
+#### `npm run test:load6`
 * same settings as for `npm run test:load1`
 
-### `npm run test:load7`
+#### `npm run test:load7`
 * same settings as for `npm run test:load1`
 
-### `npm run test:load8`
+#### `npm run test:load8`
 * same settings as for `npm run test:load1`
 
-### `npm run test:load9`
+#### `npm run test:load9`
 * same settings as for `npm run test:load1`
 
-### `npm run test:load10`
+#### `npm run test:load10`
 * same settings as for `npm run test:load1`
