@@ -12,7 +12,7 @@
 ### `cat selector > .env`
 
 ## operation tests for  DEX-core-smart-contracts
-Testing dex operations: swap tokenA / tokenB, swap tokenB / tokenA, provde liquidity and return liquidity. During tests observe that that the change in the client's balances during operations is equal to the mathematics embedded in the smart contract.
+Tests for dex operations: swap tokenA / tokenB, swap tokenB / tokenA, provde liquidity and return liquidity. During tests observe that the change in the DEX client's wallet balances during operations is equal to the mathematics embedded in the smart contract.
 
 ### `npm run test:swapA`
 * before run can change on line`1` of `dcLT-dp0-swapA.test.js` swap qty `const qtyA = 5000000000000;`
