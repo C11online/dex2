@@ -1,6 +1,5 @@
-const qtyA = 598000000;
-const qtyB = 227000000;
-const clientIndex = 7;
+const qtyA = 10000000000;
+const qtyB = 3783810000;
 const testIteration = 200;
 
 const {TonClient, abiContract, signerKeys} = require("@tonclient/core");
@@ -18,6 +17,8 @@ const assert = require('assert');
 const { expect } = require('chai');
 const logger = require('mocha-logger');
 const fs = require('fs');
+
+const clientIndex = 7;
 
 const pathJsonRoot = './DEXRootContract.json';
 const pathJsonClient = './DEXClientContractLoadTest.json';
@@ -44,6 +45,10 @@ let grammsAfter;
 let timeBefore;
 let timeAfter;
 let swapTime;
+
+let timestamp;
+let time;
+
 
 let cumulativeTimeSwap = 0;
 
@@ -131,6 +136,8 @@ async function afterSwapA(client,item) {
   response = await clientAcc.runLocal("getBalance", {_answer_id:0});
   grammsAfter = response.decoded.output.value0;
   logger.log("client TON gramm balance after:", grammsAfter);
+  reserveTon = grammsAfter < 1000000000 ? false : true;
+  grammsCount = grammsCount + (grammsBefore-grammsAfter);
   logger.log("swapB operation cost:", (grammsBefore-grammsAfter)/10**9);
   return [deltaB,checkB];
 }
@@ -209,12 +216,21 @@ async function afterSwapB(client,item) {
   response = await clientAcc.runLocal("getBalance", {_answer_id:0});
   grammsAfter = response.decoded.output.value0;
   logger.log("client TON gramm balance after:", grammsAfter);
+  reserveTon = grammsAfter < 1000000000 ? false : true;
+  grammsCount = grammsCount + (grammsBefore-grammsAfter);
   logger.log("swapB operation cost:", (grammsBefore-grammsAfter)/10**9);
   return [deltaA,checkA];
 }
 
-let testCount = 0;
+let testCount = 1;
+let msgCount = 0;
+let grammsCount = 0;
+let duration;
+let timeStart;
+let timeEndIteration;
+let reserveTon = true;
 async function testSwap(client) {
+  timeStart = Date.now();
   const dexrootAddr = JSON.parse(fs.readFileSync(pathJsonRoot,{encoding: "utf8"})).address;
   const pairAddr = JSON.parse(fs.readFileSync(currentPairPath,{encoding: "utf8"})).address;
   let resultArr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"}));
@@ -223,8 +239,10 @@ async function testSwap(client) {
   logger.log("current dexclient address: ", item.address);
   logger.log("current dexpair address: ", pairAddr);
   logger.log("timestamp: ", Date.now());
-  while (testCount<testIteration) {
-    logger.log('========> test count:', testCount);
+  while (!(testCount > testIteration) && reserveTon) {
+    timestamp = Date.now();
+    time = new Date(timestamp);
+    logger.log(clientIndex,' ========> test count:', testCount," time: ", time.toGMTString());
     const statusSwapA = await swapA(client,item);
     logger.log('swapA status: '+statusSwapA);
     arr = await afterSwapA(client,item);
@@ -233,6 +251,17 @@ async function testSwap(client) {
     logger.log('swapB status: '+statusSwapB);
     arr = await afterSwapB(client,item);
     logger.log('client balanceB changed, computed getAmountOut', arr);
+    timeEndIteration = Date.now();
+    logger.log('  ========> cumulutive data:');
+    logger.log('test count:', testCount);
+    msgCount = msgCount + 16;
+    logger.log('load msg count:', msgCount);
+    duration = (timeEndIteration - timeStart)/1000;
+    logger.log('work duration sec:', duration);
+    logger.log('msg/sec speed:', msgCount / duration);
+    logger.log('average swap time sec:', (cumulativeTimeSwap/(testCount*2))/1000);
+    logger.log('TON spend:', grammsCount/10**9);
+
     testCount++;
   }
 }
@@ -242,8 +271,6 @@ async function testSwap(client) {
   try {
     console.log(hello[networkSelector]);
     await testSwap(client);
-    logger.log('testCount:', testCount);
-    logger.log('average swap time sec:', (cumulativeTimeSwap/(testCount*2))/1000);
 
     process.exit(0);
   } catch (error) {

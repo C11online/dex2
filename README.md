@@ -1,120 +1,201 @@
 # DEX-core-smart-contracts
 
-## tests for  DEX-core-smart-contracts
+## operation tests for  DEX-core-smart-contracts
 
 ### `cd ~/dex2/DEX-core-smart-contracts/tests-dex-ntd`
 ### `npm install`
+### `cat selector > .env`
+
 ### `npm run test:swapA`
-   * line 1 set quantity A nanoTokens for swap `const qtyA = 5000000000000;`
-   * at the end of the test:
-        - DEX root address:  0:80b247a393f0b94007cf7d7f97a916924739334294950088548f70cb7f2a0369
-        - current dexclient address:  0:8ca8a693957ec10611289da900050a6770391c13d8920879a169453fff3ace14
-        - current dexpair address:  0:81bbfb35a41dddcbe467b18ab8344ca89cecb559df75b51889c26adde0a101cd
-        - rate B / A before:  0.37742788143517875
-        - swapA qty:5000000000000
-        - % qtyA from reserveA:  1.1726634935486568
-        - ((qtyA-fee(0.3%))*reserveB) / reserveA):  1881477988954
-        - computed getAmountOut:  1859734981054
-        - shift %:  1.1691455030693305
-        - client TON gramm balance before: 21840159601
-        - swapA status: true
-        - swap speed ms: 10735
-        - rate B / A after: :  0.36874209090981647
-        - client TON gramm balance after: 21639674604
-        - swapB operation cost: 0.200484997
-        - client balanceB changed, computed getAmountOut 1859734981054,1859734981054
-        - `SwapA test`
-        - the array to be checked:  1859734981054,1859734981054
-        ✔ should check equal client balanceB changed and computed getAmountOut
+* before run can change on line`1` of `dcLT-dp0-swapA.test.js` swap qty `const qtyA = 5000000000000;`
+* after the test:
+- DEX root address:  0:fcbf50fa63a7121565bb8dec1cbb7e75c8e7f7d1222cd4a827ffcb86fbb3fc42
+- current dexclient address:  0:f69a29461766ed144a0c00be74770a717875b4baa448a27078b34a5325b64326
+- current dexpair address:  0:fff130f6bc7f66a9f6f631fe99513a60c6764cb2cc88309473d3a420ba43fb59
+- rate B / A before:  0.37995261398500463
+- swapA qty:10000000000
+- % qtyA from reserveA:  0.0004999667198439735
+- ((qtyA-fee(0.3%))*reserveB) / reserveA):  3788127561
+- computed getAmountOut:  3788108678
+- shift %:  0.0004984809467032392
+- client TON gramm balance before: 12798932564
+- swapA status: true
+- swap speed ms: 8418
+- rate B / A after: :  0.37994882043907985
+- client TON gramm balance after: 12601312701
+- swapB operation cost: 0.197619863
+- client balanceB changed, computed getAmountOut 3788108678,3788108678
+- `SwapA test`
+- the array to be checked:  3788108678,3788108678
+✔ should check equal client balanceB changed and computed getAmountOut
 
 ### `npm run test:swapB`
-* line 1 set quantity B nanoTokens for swap `const qtyB = 3000000000000;`
-* at the end of the test:
-    - DEX root address:  0:80b247a393f0b94007cf7d7f97a916924739334294950088548f70cb7f2a0369
-    - current dexclient address:  0:8ca8a693957ec10611289da900050a6770391c13d8920879a169453fff3ace14
-    - current dexpair address:  0:81bbfb35a41dddcbe467b18ab8344ca89cecb559df75b51889c26adde0a101cd
-    - rate A / B before:  2.71192257312597
-    - swapB qty:3000000000000
-    - % qtyB from reserveB:  1.885987275033922
-    - ((qtyB-fee(0.3%))*reserveB) / reserveA):  8111360416220
-    - computed getAmountOut:  7961655081898
-    - shift %:  1.8803293132150003
-    - client TON gramm balance before: 21639674604
-    - swapB status: true
-    - swap speed ms: 11010
-    - rate A / B after: :  2.6125973849883257
-    - client TON gramm balance after: 21439470051
-    - swapB operation cost: 0.200204553
-    - client balanceA changed, computed getAmountOut 7961655081898,7961655081898
-    - `SwapB test`
-    - the array to be checked:  7961655081898,7961655081898
-    ✔ should check equal client balanceA changed and computed getAmountOut
+* before run can change on line`1` of `dcLT-dp0-swapB.test.js` swap qty `const qtyB = 3000000000;`
+* after the test:
+- DEX root address:  0:fcbf50fa63a7121565bb8dec1cbb7e75c8e7f7d1222cd4a827ffcb86fbb3fc42
+- current dexclient address:  0:f69a29461766ed144a0c00be74770a717875b4baa448a27078b34a5325b64326
+- current dexpair address:  0:fff130f6bc7f66a9f6f631fe99513a60c6764cb2cc88309473d3a420ba43fb59
+- rate A / B before:  2.6319334242026886
+- swapB qty:3000000000
+- % qtyB from reserveB:  0.00039476176260646494
+- ((qtyB-fee(0.3%))*reserveB) / reserveA):  7872112872
+- computed getAmountOut:  7872081889
+- shift %:  0.0003935807634718458
+- client TON gramm balance before: 12601312701
+- swapB status: true
+- swap speed ms: 12696
+- rate A / B after: :  2.6319126757614133
+- client TON gramm balance after: 12402112204
+- swapB operation cost: 0.199200497
+- client balanceA changed, computed getAmountOut 7872081889,7872081889
+- `SwapB test`
+- the array to be checked:  7872081889,7872081889
+✔ should check equal client balanceA changed and computed getAmountOut
 
 ### `npm run test:provide`
-* line 1 set quantity A nanoTokens for provide liquidity `const qtyA = 100000000000;`
-* line 2 set quantity B nanoTokens for provide liquidity `const qtyB = 30000000000;`
-* at the end of the test:
-    - reserveA before:  423593122877185
-    - reserveB before:  162127217826976
-    - totalSupply before:  161067491788218
-    - ask to provide qtyA:100000000000
-    - ask to provide qtyB:30000000000
-    - should be provide qtyA:78381618192
-    - should be provide qtyB:30000000000
-    - should get LP tokens:  29803908426
-    - client TON gramm balance before: 21439470051
-    - provide status: true
-    - provide speed ms: 10444
-    - totalSupply after:  161097295696644
-    - totalSupply changed:  29803908426
-    - client income qty LP token to balanceAB:  29803908426
-    - provided qtyA:78381618192
-    - provided qtyB:30000000000
-    - client TON gramm balance after: 20977012496
-    - provideLiquidity operation cost: 0.462457555
-    - client balanceA changed, pair balanceA changed:  78381618192 78381618192
-    - client balanceB changed, pair balanceB changed:  30000000000 30000000000
-    - client balanceAB changed, expected qty LP tokens:  29803908426 29803908426
-    - `Provide test`
-    - the array to be checked:  78381618192 78381618192
-    ✔ should check equal client balanceA changed, pair balanceA changed
-    - the array to be checked:  30000000000 30000000000
-    ✔ should check equal client balanceB changed, pair balanceB changed
-    - the array to be checked:  29803908426 29803908426
-    ✔ should check equal client balanceAB changed, expected qty LP tokens
+* before run can change on line`1` of `dcLT-dp0-provide.test.js` swap qty `const qtyA = 100000000000;`
+* before run can change on line`2` of `dcLT-dp0-provide.test.js` swap qty `const qtyB = 30000000000;`
+* after the test:
+- reserveA before:  2000135257403357
+- reserveB before:  759955022757249
+- totalSupply before:  759964175793533
+- ask to provide qtyA:100000000000
+- ask to provide qtyB:30000000000
+- should be provide qtyA:78957380272
+- should be provide qtyB:30000000000
+- should get LP tokens:  30000361325
+- client TON gramm balance before: 12402112204
+- provide status: true
+- provide speed ms: 12134
+- totalSupply after:  759994176154858
+- totalSupply changed:  30000361325
+- client income qty LP token to balanceAB:  30000361325
+- provided qtyA:78957380272
+- provided qtyB:30000000000
+- client TON gramm balance after: 11946845634
+- provideLiquidity operation cost: 0.45526657
+- client balanceA changed, pair balanceA changed:  78957380272 78957380272
+- client balanceB changed, pair balanceB changed:  30000000000 30000000000
+- client balanceAB changed, expected qty LP tokens:  30000361325 30000361325
+- `Provide test`
+- the array to be checked:  78957380272 78957380272
+✔ should check equal client balanceA changed, pair balanceA changed
+- the array to be checked:  30000000000 30000000000
+✔ should check equal client balanceB changed, pair balanceB changed
+- the array to be checked:  30000361325 30000361325
+✔ should check equal client balanceAB changed, expected qty LP tokens
 
 ### `npm run test:return`
-* line 1 set quantity burning AB nanoTokens for return liquidity `let qtyAB = 30000000000`
-* at the end of the test:
-   - reserveA before:  423827752028432
-   - reserveB before:  162217020445240
-   - totalSupply before:  161156707421922
-   - ask to return qtyAB:30000000000
-   - balance AB:123812920993
-   - expected returning qtyAB:30000000000
-   - expected receiving qtyA:78897321521
-   - expected receiving qtyB:30197381736
-   - client TON gramm balance before: 19304657399
-   - return status: true
-   - return speed ms: 12996
-   - totalSupply after:  161126707421922
-   - totalSupply changed:  30000000000
-   - client outgoing qty LP token from balanceAB:  30000000000
-   - client get qtyA:78897321521
-   - client get qtyB:30197381736
-   - client TON gramm balance after: 19024450530
-   - returnLiquidity operation cost: 0.280206869
-   - client balanceA changed, pair balanceA changed:  78897321521 78897321521
-   - client balanceB changed, pair balanceB changed:  30197381736 30197381736
-   - client balanceAB changed, expected returning qty LP tokens:  30000000000 30000000000
-   - `Return test`
-   - the array to be checked:  78897321521 78897321521
-   ✔ should check equal client balanceA changed, pair balanceA changed
-   - the array to be checked:  30197381736 30197381736
-   ✔ should check equal client balanceB changed, pair balanceB changed
-   - the array to be checked:  30000000000 30000000000
-   ✔ should check equal client balanceAB changed, expected returning LP tokens
-   - the array to be checked:  78897321521 78897321521
-   ✔ should check equal client balanceA changed, expected receiving qtyA
-   - the array to be checked:  30197381736 30197381736
-   ✔ should check equal client balanceB changed, expected receiving qtyB
+* before run can change on line`1` of `dcLT-dp0-return.test.js` burning qty `let qtyAB = 30000000000;`
+* after the test:
+- reserveA before:  2000214214783629
+- reserveB before:  759985022757249
+- totalSupply before:  759994176154858
+- ask to return qtyAB:30000000000
+- balance AB:759994176154858
+- expected returning qtyAB:30000000000
+- expected receiving qtyA:78956429307
+- expected receiving qtyB:29999638678
+- client TON gramm balance before: 11946845634
+- return status: true
+- return speed ms: 13196
+- totalSupply after:  759964176154858
+- totalSupply changed:  30000000000
+- client outgoing qty LP token from balanceAB:  30000000000
+- client get qtyA:78956429307
+- client get qtyB:29999638678
+- client TON gramm balance after: 11671789785
+- returnLiquidity operation cost: 0.275055849
+- client balanceA changed, pair balanceA changed:  78956429307 78956429307
+- client balanceB changed, pair balanceB changed:  29999638678 29999638678
+- client balanceAB changed, expected returning qty LP tokens:  30000000000 30000000000
+- `Return test`
+- the array to be checked:  78956429307 78956429307
+✔ should check equal client balanceA changed, pair balanceA changed
+- the array to be checked:  29999638678 29999638678
+✔ should check equal client balanceB changed, pair balanceB changed
+- the array to be checked:  30000000000 30000000000
+✔ should check equal client balanceAB changed, expected returning LP tokens
+- the array to be checked:  78956429307 78956429307
+✔ should check equal client balanceA changed, expected receiving qtyA
+- the array to be checked:  29999638678 29999638678
+✔ should check equal client balanceB changed, expected receiving qtyB
+
+## load test for operation tests for  DEX-core-smart-contracts
+
+### `npm run test:load1`
+* before run can change on line`1` of `dcLT-dp0-swaptest-client0` swap qty `const qtyA = 10000000000;`
+* before run can change on line`2` of `dcLT-dp0-swaptest-client0` swap qty `const qtyB = 3783810000;`
+* during the test logs:
+- DEX root address:  0:fcbf50fa63a7121565bb8dec1cbb7e75c8e7f7d1222cd4a827ffcb86fbb3fc42
+- current dexclient address:  0:f69a29461766ed144a0c00be74770a717875b4baa448a27078b34a5325b64326
+- current dexpair address:  0:fff130f6bc7f66a9f6f631fe99513a60c6764cb2cc88309473d3a420ba43fb59
+- timestamp:  1623944316210
+- 0  ========> test count: 1  time:  Thu, 17 Jun 2021 15:38:36 GMT
+- rate B / A before:  0.37994001333702637
+- swapA qty:10000000000
+- % qtyA from reserveA:  0.0004999582091471015
+- ((qtyA-fee(0.3%))*reserveB) / reserveA):  3788001933
+- computed getAmountOut:  3787983051
+- shift %:  0.0004984710793394243
+- client TON gramm balance before: 20092806705
+- swapA status: true
+- swapA speed ms: 9211
+- rate B / A after: :  0.3799362199814826
+- client TON gramm balance after: 19894586894
+- swapB operation cost: 0.198219811
+- client balanceB changed, computed getAmountOut 3787983051,3787983051
+- rate A / B before:  2.632020711393976
+- swapB qty:3783810000
+- % qtyB from reserveB:  0.0004979092052736114
+- ((qtyB-fee(0.3%))*reserveB) / reserveA):  9929189089
+- computed getAmountOut:  9929139799
+- shift %:  0.000496417625271306
+- client TON gramm balance before: 19894586894
+- swapB status: true
+- swapB speed ms: 10146
+- rate A / B after: :  2.6319945407575496
+- client TON gramm balance after: 19695386778
+- swapB operation cost: 0.199200116
+- client balanceB changed, computed getAmountOut 9929139799,9929139799
+-   ========> cumulutive data:
+- test count: 1
+- load msg count: 16
+- work duration sec: 22.976
+- msg/sec speed: 0.6963788300835655
+- average swap time sec: 9.6785
+- TON spend: 0.397419927
+- 0  ========> test count: 2  time:  Thu, 17 Jun 2021 15:38:59 GMT
+- rate B / A before:  0.3799399977904881
+- swapA qty:10000000000
+- % qtyA from reserveA:  0.000499958191435013
+- ((qtyA-fee(0.3%))*reserveB) / reserveA):  3788001778
+- computed getAmountOut:  3787982896
+- shift %:  0.0004984710997462116
+- client TON gramm balance before: 19695386778
+- swapA status: true
+- swapA speed ms: 7726
+- rate B / A after: :  0.3799362044352339
+- client TON gramm balance after: 19495917690
+- swapB operation cost: 0.199469088
+- client balanceB changed, computed getAmountOut 3787982896,3787982896
+- rate A / B before:  2.6320208190911316
+- swapB qty:3783810000
+- % qtyB from reserveB:  0.0004979092080076747
+- ((qtyB-fee(0.3%))*reserveB) / reserveA):  9929189495
+- computed getAmountOut:  9929140205
+- shift %:  0.0004964176049782054
+- client TON gramm balance before: 19495917690
+- swapB status: true
+- swapB speed ms: 7454
+- rate A / B after: :  2.6319946484534906
+- client TON gramm balance after: 19297342601
+- swapB operation cost: 0.198575089
+- client balanceB changed, computed getAmountOut 9929140205,9929140205
+-   ========> cumulutive data:
+- test count: 2
+- load msg count: 32
+- work duration sec: 41.001
+- msg/sec speed: 0.7804687690544133
+- average swap time sec: 8.63425
+- TON spend: 0.795464104
