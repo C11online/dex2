@@ -1,3 +1,7 @@
+# DEX-core-smart-contracts description
+
+##
+
 # DEX-core-smart-contracts tests
 
 ## before
@@ -8,7 +12,7 @@
 ### `cat selector > .env`
 
 ## operation tests for  DEX-core-smart-contracts
-Testing exchange operations swap tokenA / tokenB, swap tokenB / tokenA, provde liquidity and return liquidity.
+Testing dex operations: swap tokenA / tokenB, swap tokenB / tokenA, provde liquidity and return liquidity. During tests observe that that the change in the client's balances during operations is equal to the mathematics embedded in the smart contract.
 
 ### `npm run test:swapA`
 * before run can change on line`1` of `dcLT-dp0-swapA.test.js` swap qty `const qtyA = 5000000000000;`
@@ -126,7 +130,7 @@ Testing exchange operations swap tokenA / tokenB, swap tokenB / tokenA, provde l
   ✔ should check equal client balanceB changed, expected receiving qtyB
 
 ## load test for  DEX-core-smart-contracts
-Testing several simultaneous swaps to observe their parallel execution from different DEX clients smart contract to one DEX pair smart contract, during this test each script add msgs load about 0.5 - 1 msg/sec.
+Testing several simultaneous swaps to observe their parallel execution from different DEX clients smart contract to one DEX pair smart contract, during this test each script add msgs load about 0.5 - 1 msg/sec. During test observe stable DEXpair working under load level about 5-10  msg/sec and average swap speed 10 sec, which means that concurrent requests will be processed correctly
 
 ### in separate console windows `npm run test:load1`,then ... ,then `npm run test:load10`
 ### `npm run test:load1`
