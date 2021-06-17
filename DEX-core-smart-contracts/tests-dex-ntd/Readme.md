@@ -1,6 +1,6 @@
 # DEX-core-smart-contracts tests
 
-## before running
+## before
 
 ### `git clone git@github.com:radianceteam/dex2.git`
 ### `cd ~/dex2/DEX-core-smart-contracts/tests-dex-ntd`
@@ -8,7 +8,7 @@
 ### `cat selector > .env`
 
 ## operation tests for  DEX-core-smart-contracts
-Testing exchange operations swap tokenA/tokenB, swap tokenB/tokenA, provde liquidity and return liquidity.
+Testing exchange operations swap tokenA / tokenB, swap tokenB / tokenA, provde liquidity and return liquidity.
 
 ### `npm run test:swapA`
 * before run can change on line`1` of `dcLT-dp0-swapA.test.js` swap qty `const qtyA = 5000000000000;`
@@ -128,7 +128,7 @@ Testing exchange operations swap tokenA/tokenB, swap tokenB/tokenA, provde liqui
 ## load test for  DEX-core-smart-contracts
 Testing several simultaneous swaps to observe their parallel execution from different DEX clients smart contract to one DEX pair smart contract, during this test each script add msgs load about 0.5 - 1 msg/sec.
 
-### in separate console windows `npm run test:load1`,then `npm run test:load2`, ... ,then `npm run test:load10`
+### in separate console windows `npm run test:load1`,then ... ,then `npm run test:load10`
 ### `npm run test:load1`
 * before run can change on line`1` of `dcLT-dp0-swaptest-client0.js` token A qty for one swap`const qtyA = 10000000000;`
 * before run can change on line`2` of `dcLT-dp0-swaptest-client0.js` token B qty for one swap `const qtyB = 3783810000;`
