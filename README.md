@@ -1,6 +1,7 @@
 # DEX-core-smart-contracts description
 
-##
+## architecture
+https://docs.google.com/drawings/d/176G8UEKKl_HBiC55Fq_2GYG0pdHdxxJrvAhbCLuFzhM/edit?usp=sharing
 
 # DEX-core-smart-contracts tests
 
