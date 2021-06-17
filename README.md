@@ -1,13 +1,11 @@
 # DEX-core-smart-contracts description
 
 ## DEX-core-smart-contracts develop goal
-DEX-core-smart-contracts developed for speed optimization dex operations. During stage 1 tested speed of msg between smartcontracts deployed in different shard of freeTON is about 15-20 sec. For dex operations which consist from more then 8 consecutive msgs it leads for operation time > 120 sec. Using sharding optimization we decrease this time to 5-15 sec.
+DEX-core-smart-contracts developed for speed optimization dex operations. During stage 1 tested speed of msg between smartcontracts deployed in different shard of freeTON is about 15-20 sec. For dex operations which consist from more then 8 consecutive msgs it leads for operation time > 120 sec. Using sharding optimization we decreased this 10 times to 5-15 sec.
 
 ## DEX-core-smart-contracts architecture with sharding optimization
 ![DEX-core-smart-contracts-architecture](DEX-core-smart-contracts-architecture.png)
 https://docs.google.com/drawings/d/176G8UEKKl_HBiC55Fq_2GYG0pdHdxxJrvAhbCLuFzhM/edit?usp=sharing
-
-
 
 # DEX-core-smart-contracts tests
 
