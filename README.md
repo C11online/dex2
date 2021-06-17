@@ -121,11 +121,13 @@
 - the array to be checked:  29999638678 29999638678
 ✔ should check equal client balanceB changed, expected receiving qtyB
 
-## load test for operation tests for  DEX-core-smart-contracts
+## load test for  DEX-core-smart-contracts
 
+### separate console `npm run test:load1`,then `npm run test:load2`, ... ,then `npm run test:load10`
 ### `npm run test:load1`
-* before run can change on line`1` of `dcLT-dp0-swaptest-client0` swap qty `const qtyA = 10000000000;`
-* before run can change on line`2` of `dcLT-dp0-swaptest-client0` swap qty `const qtyB = 3783810000;`
+* before run can change on line`1` of `dcLT-dp0-swaptest-client0.js` token A qty for one swap`const qtyA = 10000000000;`
+* before run can change on line`2` of `dcLT-dp0-swaptest-client0.js` token B qty for one swap `const qtyB = 3783810000;`
+* before run can change on line`3` of `dcLT-dp0-swaptest-client0.js` iteration qty `const testIteration = 200;`
 * during the test logs:
 - DEX root address:  0:fcbf50fa63a7121565bb8dec1cbb7e75c8e7f7d1222cd4a827ffcb86fbb3fc42
 - current dexclient address:  0:f69a29461766ed144a0c00be74770a717875b4baa448a27078b34a5325b64326
@@ -199,3 +201,30 @@
 - msg/sec speed: 0.7804687690544133
 - average swap time sec: 8.63425
 - TON spend: 0.795464104
+
+### `npm run test:load2`
+* same settings as for `npm run test:load1`
+
+### `npm run test:load3`
+* same settings as for `npm run test:load1`
+
+### `npm run test:load4`
+* same settings as for `npm run test:load1`
+
+### `npm run test:load5`
+* same settings as for `npm run test:load1`
+
+### `npm run test:load6`
+* same settings as for `npm run test:load1`
+
+### `npm run test:load7`
+* same settings as for `npm run test:load1`
+
+### `npm run test:load8`
+* same settings as for `npm run test:load1`
+
+### `npm run test:load9`
+* same settings as for `npm run test:load1`
+
+### `npm run test:load10`
+* same settings as for `npm run test:load1`
