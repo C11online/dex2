@@ -201,3 +201,43 @@ Getter function
 
 ## node dc-dp0-balance
 Getter function
+
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime       
+[0] xT-- /usr/bin/node dcLT-dp0-swaptest-client0.js 2491318 2552777    /root/.forever/xT--.log 0:0:0:49.543
+root@frhb52973ds:~/dex2/DEX-core-smart-contracts/tests-dex-ntd# forever stop dcLT-dp0-swaptest-client1.js
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime       
+[0] 76ny /usr/bin/node dcLT-dp0-swaptest-client1.js 2491928 2553009    /root/.forever/76ny.log 0:0:0:28.209
+root@frhb52973ds:~/dex2/DEX-core-smart-contracts/tests-dex-ntd# forever stop dcLT-dp0-swaptest-client2.js
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime       
+[0] YAH3 /usr/bin/node dcLT-dp0-swaptest-client2.js 2491981 2553173    /root/.forever/YAH3.log 0:0:0:21.969
+root@frhb52973ds:~/dex2/DEX-core-smart-contracts/tests-dex-ntd# forever stop dcLT-dp0-swaptest-client3.js
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime       
+[0] Sj9X /usr/bin/node dcLT-dp0-swaptest-client3.js 2492031 2553081    /root/.forever/Sj9X.log 0:0:0:30.359
+root@frhb52973ds:~/dex2/DEX-core-smart-contracts/tests-dex-ntd# forever stop dcLT-dp0-swaptest-client4.js
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime       
+[0] H7zz /usr/bin/node dcLT-dp0-swaptest-client4.js 2492159 2553075    /root/.forever/H7zz.log 0:0:0:34.615
+root@frhb52973ds:~/dex2/DEX-core-smart-contracts/tests-dex-ntd# forever stop dcLT-dp0-swaptest-client5.js
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime      
+[0] MFfx /usr/bin/node dcLT-dp0-swaptest-client5.js 2492263 2553457    /root/.forever/MFfx.log 0:0:0:3.731
+root@frhb52973ds:~/dex2/DEX-core-smart-contracts/tests-dex-ntd# forever stop dcLT-dp0-swaptest-client6.js
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime       
+[0] Clfx /usr/bin/node dcLT-dp0-swaptest-client6.js 2492313 2553241    /root/.forever/Clfx.log 0:0:0:29.461
+root@frhb52973ds:~/dex2/DEX-core-smart-contracts/tests-dex-ntd# forever stop dcLT-dp0-swaptest-client7.js
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime       
+[0] xRfx /usr/bin/node dcLT-dp0-swaptest-client7.js 2492379 2553016    /root/.forever/xRfx.log 0:0:0:56.115
+root@frhb52973ds:~/dex2/DEX-core-smart-contracts/tests-dex-ntd# forever stop dcLT-dp0-swaptest-client8.js
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime       
+[0] er1Y /usr/bin/node dcLT-dp0-swaptest-client8.js 2492429 2553204    /root/.forever/er1Y.log 0:0:0:48.612
+root@frhb52973ds:~/dex2/DEX-core-smart-contracts/tests-dex-ntd# forever stop dcLT-dp0-swaptest-client9.js
+info:    Forever stopped process:
+    uid  command       script                       forever pid     id logfile                 uptime      
+[0] Slf0 /usr/bin/node dcLT-dp0-swaptest-client9.js 2492500 2553557    /root/.forever/Slf0.log 0:0:0:3.917

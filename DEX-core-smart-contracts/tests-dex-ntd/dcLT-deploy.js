@@ -54,8 +54,8 @@ async function main(client) {
       const giverNTDAddress = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).address;;
       const giverNTDKeys = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).keys;
       const giverNTDAcc = new Account(GiverContractNTD, {address: giverNTDAddress,signer: giverNTDKeys,client,});
-      response = await giverNTDAcc.run("sendTransaction", {dest:rootAddr,value:10000000000,bounce:false});
-      console.log("Giver send 10 ton to rootAddr:", response.decoded.output);
+      response = await giverNTDAcc.run("sendTransaction", {dest:rootAddr,value:20000000000,bounce:false});
+      console.log("Giver send 20 ton to rootAddr:", response.decoded.output);
       response = await clientSignedRootAcc.run("setCreator", {giverAddr:giverNTDAddress});
       console.log("Contract reacted to your setCreator:", response.decoded.output);
       response = await rootAcc.run("createDEXclient", {pubkey:pubkey, souint:clientSoArg});
@@ -68,8 +68,8 @@ async function main(client) {
     const giverRTDAddress = JSON.parse(fs.readFileSync('./GiverContractRTD.json',{encoding: "utf8"})).address;;
     const giverRTDKeys = JSON.parse(fs.readFileSync('./GiverContractRTD.json',{encoding: "utf8"})).keys;
     const giverRTDAcc = new Account(GiverContract, {address: giverRTDAddress,signer: giverRTDKeys,client,});
-    response = await giverRTDAcc.run("sendTransaction", {dest:rootAddr,value:10000000000,bounce:false});
-    console.log("Giver send 10 ton to rootAddr:", response.decoded.output);
+    response = await giverRTDAcc.run("sendTransaction", {dest:rootAddr,value:20000000000,bounce:false});
+    console.log("Giver send 20 ton to rootAddr:", response.decoded.output);
     response = await clientSignedRootAcc.run("setCreator", {giverAddr:giverRTDAddress});
     console.log("Contract reacted to your setCreator:", response.decoded.output);
     response = await rootAcc.run("createDEXclient", {pubkey:pubkey, souint:clientSoArg});
