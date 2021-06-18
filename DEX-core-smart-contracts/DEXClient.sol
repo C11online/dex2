@@ -37,7 +37,9 @@ contract DEXClient is ITokensReceivedCallback, IDEXClient, IDEXConnect {
   mapping (address => address) public rootConnector;
   mapping (address => Connector) connectors;
 
-  // Callback structure. Use only for dev
+  uint public counterCallback;
+
+  // Callback structure.
   struct Callback {
     address token_wallet;
     address token_root;
@@ -52,7 +54,6 @@ contract DEXClient is ITokensReceivedCallback, IDEXClient, IDEXConnect {
     address payload_arg2;
   }
 
-  uint public counterCallback;
   mapping (uint => Callback) callbacks;
 
   // Pair structure
@@ -112,6 +113,12 @@ contract DEXClient is ITokensReceivedCallback, IDEXClient, IDEXConnect {
     (, uint128 remainder) = math.muldivmod(arg0, arg1, arg2);
     return remainder;
   }
+
+  // Function for get first callback id.
+  function getFirstCallback() private view returns (uint) {
+		optional(uint, Callback) rc = callbacks.min();
+		if (rc.hasValue()) {(uint number, ) = rc.get();return number;} else {return 0;}
+	}
 
   // Callback for DEXpair to set connection data.
   function setPair(address arg0, address arg1, address arg2, address arg3, address arg4) public alwaysAccept override {
@@ -284,7 +291,6 @@ contract DEXClient is ITokensReceivedCallback, IDEXClient, IDEXConnect {
     uint128 updated_balance,
     TvmCell payload
   ) public override alwaysAccept {
-    counterCallback++;
     Callback cc = callbacks[counterCallback];
     cc.token_wallet = token_wallet;
     cc.token_root = token_root;
@@ -300,6 +306,8 @@ contract DEXClient is ITokensReceivedCallback, IDEXClient, IDEXConnect {
     cc.payload_arg1 = arg1;
     cc.payload_arg2 = arg2;
     callbacks[counterCallback] = cc;
+    counterCallback++;
+    if (counterCallback > 10){delete callbacks[getFirstCallback()];}
   }
 
   // Function for get callback

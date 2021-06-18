@@ -43,8 +43,6 @@ contract DEXPair is IDEXPair, IDEXConnect, ITokensReceivedCallback, IBurnTokensC
   mapping (address => address) public rootConnector;
   mapping (address => Connector) public connectors;
 
-  uint public counterCallback;
-
   struct Callback {
     address token_wallet;
     address token_root;
@@ -59,6 +57,7 @@ contract DEXPair is IDEXPair, IDEXConnect, ITokensReceivedCallback, IBurnTokensC
     address payload_arg2;
   }
 
+  uint public counterCallback;
   mapping (uint => Callback) callbacks;
 
   // Grams constants
@@ -229,12 +228,6 @@ contract DEXPair is IDEXPair, IDEXConnect, ITokensReceivedCallback, IBurnTokensC
     delete processingDest[rootB][dexclient];
   }
 
-  // Function for get first callback id.
-  function getFirstCallback() private view returns (uint) {
-		optional(uint, Callback) rc = callbacks.min();
-		if (rc.hasValue()) {(uint number, ) = rc.get();return number;} else {return 0;}
-	}
-
   // Function to callback from TON Token Wallet of Root Token Contract to DEX Pair.
   function tokensReceivedCallback(
     address token_wallet,
@@ -248,230 +241,115 @@ contract DEXPair is IDEXPair, IDEXConnect, ITokensReceivedCallback, IBurnTokensC
     TvmCell payload
   ) public override alwaysAccept {
     if (msg.sender == walletReserve[rootA] || msg.sender == walletReserve[rootB]) {
-      if (counterCallback > 10) {
-        Callback cc = callbacks[counterCallback];
-        cc.token_wallet = token_wallet;
-        cc.token_root = token_root;
-        cc.amount = amount;
-        cc.sender_public_key = sender_public_key;
-        cc.sender_address = sender_address;
-        cc.sender_wallet = sender_wallet;
-        cc.original_gas_to = original_gas_to;
-        cc.updated_balance = updated_balance;
-        TvmSlice slice = payload.toSlice();
-        (uint8 arg0, address arg1, address arg2) = slice.decode(uint8, address, address);
-        cc.payload_arg0 = arg0;
-        cc.payload_arg1 = arg1;
-        cc.payload_arg2 = arg2;
-        callbacks[counterCallback] = cc;
-        counterCallback++;
-        delete callbacks[getFirstCallback()];
-        if (arg0 == 1) {
-          tvm.rawReserve(address(this).balance - msg.value, 2);
-          uint128 amountOut = getAmountOut(amount, token_root, arg1);
-          if (!(amountOut > balanceReserve[arg1])){
-            balanceReserve[token_root] += amount;
-            balanceReserve[arg1] -= amountOut;
-            syncStatus[token_root] = balanceReserve[token_root] == updated_balance ? true : false;
-            TvmBuilder builder;
-            builder.store(uint8(0), address(0), address(0));
-            TvmCell new_payload = builder.toCell();
-            TvmCell body = tvm.encodeBody(IDEXConnector(rootConnector[arg1]).transfer, arg2, amountOut, new_payload);
-            rootConnector[arg1].transfer({value: 0, bounce:true, flag: 128, body:body});
-          } else {
-            TvmBuilder builder;
-            builder.store(uint8(8), address(0), address(0));
-            TvmCell new_payload = builder.toCell();
-            TvmCell body = tvm.encodeBody(IDEXConnector(rootConnector[token_root]).transfer, token_wallet, amount, new_payload);
-            rootConnector[token_root].transfer({value: 0, bounce:true, flag: 128, body:body});
-          }
+      Callback cc = callbacks[counterCallback];
+      cc.token_wallet = token_wallet;
+      cc.token_root = token_root;
+      cc.amount = amount;
+      cc.sender_public_key = sender_public_key;
+      cc.sender_address = sender_address;
+      cc.sender_wallet = sender_wallet;
+      cc.original_gas_to = original_gas_to;
+      cc.updated_balance = updated_balance;
+      TvmSlice slice = payload.toSlice();
+      (uint8 arg0, address arg1, address arg2) = slice.decode(uint8, address, address);
+      cc.payload_arg0 = arg0;
+      cc.payload_arg1 = arg1;
+      cc.payload_arg2 = arg2;
+      callbacks[counterCallback] = cc;
+      counterCallback++;
+      if (arg0 == 1) {
+        tvm.rawReserve(address(this).balance - msg.value, 2);
+        uint128 amountOut = getAmountOut(amount, token_root, arg1);
+        if (!(amountOut > balanceReserve[arg1])){
+          balanceReserve[token_root] += amount;
+          balanceReserve[arg1] -= amountOut;
+          syncStatus[token_root] = balanceReserve[token_root] == updated_balance ? true : false;
+          TvmBuilder builder;
+          builder.store(uint8(0), address(0), address(0));
+          TvmCell new_payload = builder.toCell();
+          TvmCell body = tvm.encodeBody(IDEXConnector(rootConnector[arg1]).transfer, arg2, amountOut, new_payload);
+          rootConnector[arg1].transfer({value: 0, bounce:true, flag: 128, body:body});
+        } else {
+          TvmBuilder builder;
+          builder.store(uint8(8), address(0), address(0));
+          TvmCell new_payload = builder.toCell();
+          TvmCell body = tvm.encodeBody(IDEXConnector(rootConnector[token_root]).transfer, token_wallet, amount, new_payload);
+          rootConnector[token_root].transfer({value: 0, bounce:true, flag: 128, body:body});
         }
-        if (arg0 == 2) {
-          tvm.rawReserve(address(this).balance - msg.value, 2);
-          processingStatus[token_root][arg1] = true;
-          processingData[token_root][arg1] += amount;
-          processingDest[token_root][arg1] = sender_wallet;
-          if (processingStatus[rootA][arg1] == true && processingStatus[rootB][arg1] == true) {
-            uint128 amountA = processingData[rootA][arg1];
-            uint128 amountB = processingData[rootB][arg1];
-            if (totalSupply == 0 && balanceReserve[rootA] == 0 && balanceReserve[rootB] == 0) {
-              uint128 liquidity = math.min(amountA,amountB);
-              balanceReserve[rootA] += amountA;
-              balanceReserve[rootB] += amountB;
+      }
+      if (arg0 == 2) {
+        tvm.rawReserve(address(this).balance - msg.value, 2);
+        processingStatus[token_root][arg1] = true;
+        processingData[token_root][arg1] += amount;
+        processingDest[token_root][arg1] = sender_wallet;
+        if (processingStatus[rootA][arg1] == true && processingStatus[rootB][arg1] == true) {
+          uint128 amountA = processingData[rootA][arg1];
+          uint128 amountB = processingData[rootB][arg1];
+          if (totalSupply == 0 && balanceReserve[rootA] == 0 && balanceReserve[rootB] == 0) {
+            uint128 liquidity = math.min(amountA,amountB);
+            balanceReserve[rootA] += amountA;
+            balanceReserve[rootB] += amountB;
+            totalSupply += liquidity;
+            TvmCell body = tvm.encodeBody(IRootTokenContract(rootAB).mint, liquidity, arg2);
+            rootAB.transfer({value: GRAMS_MINT, bounce:true, body:body});
+            cleanProcessing(arg1);
+            arg1.transfer({ value: 0, flag: 128});
+          } else {
+            (uint128 provideA, uint128 provideB) = acceptForProvide(amountA, amountB);
+            if (provideA > 0 && provideB > 0) {
+              uint128 liquidity = math.min(liquidityA(provideA),liquidityB(provideB));
+              uint128 unusedReturnA = amountA - provideA;
+              uint128 unusedReturnB = amountB - provideB;
+              balanceReserve[rootA] += provideA;
+              balanceReserve[rootB] += provideB;
               totalSupply += liquidity;
               TvmCell body = tvm.encodeBody(IRootTokenContract(rootAB).mint, liquidity, arg2);
               rootAB.transfer({value: GRAMS_MINT, bounce:true, body:body});
-              cleanProcessing(arg1);
-              arg1.transfer({ value: 0, flag: 128});
-            } else {
-              (uint128 provideA, uint128 provideB) = acceptForProvide(amountA, amountB);
-              if (provideA > 0 && provideB > 0) {
-                uint128 liquidity = math.min(liquidityA(provideA),liquidityB(provideB));
-                uint128 unusedReturnA = amountA - provideA;
-                uint128 unusedReturnB = amountB - provideB;
-                balanceReserve[rootA] += provideA;
-                balanceReserve[rootB] += provideB;
-                totalSupply += liquidity;
-                TvmCell body = tvm.encodeBody(IRootTokenContract(rootAB).mint, liquidity, arg2);
-                rootAB.transfer({value: GRAMS_MINT, bounce:true, body:body});
-                if (unusedReturnA > 0 && unusedReturnB > 0) {
-                  TvmBuilder builder;
-                  builder.store(uint8(7), address(0), address(0));
-                  TvmCell new_payload = builder.toCell();
-                  TvmCell bodyA = tvm.encodeBody(IDEXConnector(rootConnector[rootA]).transfer, processingDest[rootA][arg1], unusedReturnA, new_payload);
-                  TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, processingDest[rootB][arg1], unusedReturnB, new_payload);
-                  rootConnector[rootA].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyA});
-                  rootConnector[rootB].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyB});
-                  cleanProcessing(arg1);
-                  arg1.transfer({ value: 0, flag: 128});
-                } else if (unusedReturnA > 0) {
-                  TvmBuilder builder;
-                  builder.store(uint8(7), address(0), address(0));
-                  TvmCell new_payload = builder.toCell();
-                  TvmCell bodyA = tvm.encodeBody(IDEXConnector(rootConnector[rootA]).transfer, processingDest[rootA][arg1], unusedReturnA, new_payload);
-                  rootConnector[rootA].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyA});
-                  cleanProcessing(arg1);
-                  arg1.transfer({ value: 0, flag: 128});
-                } else if (unusedReturnB > 0) {
-                  TvmBuilder builder;
-                  builder.store(uint8(7), address(0), address(0));
-                  TvmCell new_payload = builder.toCell();
-                  TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, processingDest[rootB][arg1], unusedReturnB, new_payload);
-                  rootConnector[rootB].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyB});
-                  cleanProcessing(arg1);
-                  arg1.transfer({ value: 0, flag: 128});
-                } else {
-                  cleanProcessing(arg1);
-                  arg1.transfer({ value: 0, flag: 128});
-                }
-              } else {
+              if (unusedReturnA > 0 && unusedReturnB > 0) {
                 TvmBuilder builder;
-                builder.store(uint8(9), address(0), address(0));
+                builder.store(uint8(7), address(0), address(0));
                 TvmCell new_payload = builder.toCell();
-                TvmCell bodyA = tvm.encodeBody(IDEXConnector(rootConnector[rootA]).transfer, processingDest[rootA][arg1], amountA, new_payload);
-                TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, processingDest[rootB][arg1], amountB, new_payload);
+                TvmCell bodyA = tvm.encodeBody(IDEXConnector(rootConnector[rootA]).transfer, processingDest[rootA][arg1], unusedReturnA, new_payload);
+                TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, processingDest[rootB][arg1], unusedReturnB, new_payload);
                 rootConnector[rootA].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyA});
                 rootConnector[rootB].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyB});
                 cleanProcessing(arg1);
                 arg1.transfer({ value: 0, flag: 128});
-              }
-            }
-          } else {
-            arg1.transfer({ value: 0, flag: 128});
-          }
-        }
-      } else {
-        Callback cc = callbacks[counterCallback];
-        cc.token_wallet = token_wallet;
-        cc.token_root = token_root;
-        cc.amount = amount;
-        cc.sender_public_key = sender_public_key;
-        cc.sender_address = sender_address;
-        cc.sender_wallet = sender_wallet;
-        cc.original_gas_to = original_gas_to;
-        cc.updated_balance = updated_balance;
-        TvmSlice slice = payload.toSlice();
-        (uint8 arg0, address arg1, address arg2) = slice.decode(uint8, address, address);
-        cc.payload_arg0 = arg0;
-        cc.payload_arg1 = arg1;
-        cc.payload_arg2 = arg2;
-        callbacks[counterCallback] = cc;
-        counterCallback++;
-        if (arg0 == 1) {
-          tvm.rawReserve(address(this).balance - msg.value, 2);
-          uint128 amountOut = getAmountOut(amount, token_root, arg1);
-          if (!(amountOut > balanceReserve[arg1])){
-            balanceReserve[token_root] += amount;
-            balanceReserve[arg1] -= amountOut;
-            syncStatus[token_root] = balanceReserve[token_root] == updated_balance ? true : false;
-            TvmBuilder builder;
-            builder.store(uint8(0), address(0), address(0));
-            TvmCell new_payload = builder.toCell();
-            TvmCell body = tvm.encodeBody(IDEXConnector(rootConnector[arg1]).transfer, arg2, amountOut, new_payload);
-            rootConnector[arg1].transfer({value: 0, bounce:true, flag: 128, body:body});
-          } else {
-            TvmBuilder builder;
-            builder.store(uint8(8), address(0), address(0));
-            TvmCell new_payload = builder.toCell();
-            TvmCell body = tvm.encodeBody(IDEXConnector(rootConnector[token_root]).transfer, token_wallet, amount, new_payload);
-            rootConnector[token_root].transfer({value: 0, bounce:true, flag: 128, body:body});
-          }
-        }
-        if (arg0 == 2) {
-          tvm.rawReserve(address(this).balance - msg.value, 2);
-          processingStatus[token_root][arg1] = true;
-          processingData[token_root][arg1] += amount;
-          processingDest[token_root][arg1] = sender_wallet;
-          if (processingStatus[rootA][arg1] == true && processingStatus[rootB][arg1] == true) {
-            uint128 amountA = processingData[rootA][arg1];
-            uint128 amountB = processingData[rootB][arg1];
-            if (totalSupply == 0 && balanceReserve[rootA] == 0 && balanceReserve[rootB] == 0) {
-              uint128 liquidity = math.min(amountA,amountB);
-              balanceReserve[rootA] += amountA;
-              balanceReserve[rootB] += amountB;
-              totalSupply += liquidity;
-              TvmCell body = tvm.encodeBody(IRootTokenContract(rootAB).mint, liquidity, arg2);
-              rootAB.transfer({value: GRAMS_MINT, bounce:true, body:body});
-              cleanProcessing(arg1);
-              arg1.transfer({ value: 0, flag: 128});
-            } else {
-              (uint128 provideA, uint128 provideB) = acceptForProvide(amountA, amountB);
-              if (provideA > 0 && provideB > 0) {
-                uint128 liquidity = math.min(liquidityA(provideA),liquidityB(provideB));
-                uint128 unusedReturnA = amountA - provideA;
-                uint128 unusedReturnB = amountB - provideB;
-                balanceReserve[rootA] += provideA;
-                balanceReserve[rootB] += provideB;
-                totalSupply += liquidity;
-                TvmCell body = tvm.encodeBody(IRootTokenContract(rootAB).mint, liquidity, arg2);
-                rootAB.transfer({value: GRAMS_MINT, bounce:true, body:body});
-                if (unusedReturnA > 0 && unusedReturnB > 0) {
-                  TvmBuilder builder;
-                  builder.store(uint8(7), address(0), address(0));
-                  TvmCell new_payload = builder.toCell();
-                  TvmCell bodyA = tvm.encodeBody(IDEXConnector(rootConnector[rootA]).transfer, processingDest[rootA][arg1], unusedReturnA, new_payload);
-                  TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, processingDest[rootB][arg1], unusedReturnB, new_payload);
-                  rootConnector[rootA].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyA});
-                  rootConnector[rootB].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyB});
-                  cleanProcessing(arg1);
-                  arg1.transfer({ value: 0, flag: 128});
-                } else if (unusedReturnA > 0) {
-                  TvmBuilder builder;
-                  builder.store(uint8(7), address(0), address(0));
-                  TvmCell new_payload = builder.toCell();
-                  TvmCell bodyA = tvm.encodeBody(IDEXConnector(rootConnector[rootA]).transfer, processingDest[rootA][arg1], unusedReturnA, new_payload);
-                  rootConnector[rootA].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyA});
-                  cleanProcessing(arg1);
-                  arg1.transfer({ value: 0, flag: 128});
-                } else if (unusedReturnB > 0) {
-                  TvmBuilder builder;
-                  builder.store(uint8(7), address(0), address(0));
-                  TvmCell new_payload = builder.toCell();
-                  TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, processingDest[rootB][arg1], unusedReturnB, new_payload);
-                  rootConnector[rootB].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyB});
-                  cleanProcessing(arg1);
-                  arg1.transfer({ value: 0, flag: 128});
-                } else {
-                  cleanProcessing(arg1);
-                  arg1.transfer({ value: 0, flag: 128});
-                }
-              } else {
+              } else if (unusedReturnA > 0) {
                 TvmBuilder builder;
-                builder.store(uint8(9), address(0), address(0));
+                builder.store(uint8(7), address(0), address(0));
                 TvmCell new_payload = builder.toCell();
-                TvmCell bodyA = tvm.encodeBody(IDEXConnector(rootConnector[rootA]).transfer, processingDest[rootA][arg1], amountA, new_payload);
-                TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, processingDest[rootB][arg1], amountB, new_payload);
+                TvmCell bodyA = tvm.encodeBody(IDEXConnector(rootConnector[rootA]).transfer, processingDest[rootA][arg1], unusedReturnA, new_payload);
                 rootConnector[rootA].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyA});
+                cleanProcessing(arg1);
+                arg1.transfer({ value: 0, flag: 128});
+              } else if (unusedReturnB > 0) {
+                TvmBuilder builder;
+                builder.store(uint8(7), address(0), address(0));
+                TvmCell new_payload = builder.toCell();
+                TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, processingDest[rootB][arg1], unusedReturnB, new_payload);
                 rootConnector[rootB].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyB});
                 cleanProcessing(arg1);
                 arg1.transfer({ value: 0, flag: 128});
+              } else {
+                cleanProcessing(arg1);
+                arg1.transfer({ value: 0, flag: 128});
               }
+            } else {
+              TvmBuilder builder;
+              builder.store(uint8(9), address(0), address(0));
+              TvmCell new_payload = builder.toCell();
+              TvmCell bodyA = tvm.encodeBody(IDEXConnector(rootConnector[rootA]).transfer, processingDest[rootA][arg1], amountA, new_payload);
+              TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, processingDest[rootB][arg1], amountB, new_payload);
+              rootConnector[rootA].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyA});
+              rootConnector[rootB].transfer({value: GRAMS_SEND_UNUSED_RETURN, bounce:true, body:bodyB});
+              cleanProcessing(arg1);
+              arg1.transfer({ value: 0, flag: 128});
             }
-          } else {
-            arg1.transfer({ value: 0, flag: 128});
           }
+        } else {
+          arg1.transfer({ value: 0, flag: 128});
         }
-
       }
     }
   }
@@ -516,12 +394,9 @@ function burnCallback(
         TvmCell bodyB = tvm.encodeBody(IDEXConnector(rootConnector[rootB]).transfer, arg2, returnB, new_payload);
         rootConnector[rootA].transfer({value: GRAMS_RETURN, bounce:true, body:bodyA});
         rootConnector[rootB].transfer({value: GRAMS_RETURN, bounce:true, body:bodyB});
-        if (counterCallback > 10){delete callbacks[getFirstCallback()];}
         send_gas_to.transfer({value: 0, bounce:true, flag: 128});
       }
-      if (counterCallback > 10){delete callbacks[getFirstCallback()];}
     }
-    if (counterCallback > 10){delete callbacks[getFirstCallback()];}
   }
 }
 
