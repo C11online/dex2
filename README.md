@@ -10,14 +10,19 @@ from https://github.com/radianceteam/dex/blob/main/Radiance%20DEX%20stage%201.pd
 1. DEX-core-smart-contracts developed for speed optimization dex operations. During stage 1 tested speed of msg between smartcontracts deployed in different shard of freeTON is about 15-20 sec. For dex operations which consist from more then 8 consecutive msgs it leads for operation time > 120 sec. Using sharding optimization we decreased this 10 times to 5-15 sec.
 2. DEX-core-smart-contracts developed for gas manegment optimization dex operations.
 
-## DEX-core-smart-contracts architecture with sharding optimization
-![DEX-core-smart-contracts-architecture](DEX-core-smart-contracts-architecture.png)
-https://docs.google.com/drawings/d/176G8UEKKl_HBiC55Fq_2GYG0pdHdxxJrvAhbCLuFzhM/edit?usp=sharing
-
 ## DEX-core-smart-contracts web interface
  * https://trade.defispace.com
 
  * https://github.com/radianceteam/dex2front
+
+## DEX-core-smart-contracts architecture with sharding optimization
+![DEX-core-smart-contracts-architecture](DEX-core-smart-contracts-architecture.png)
+https://docs.google.com/drawings/d/176G8UEKKl_HBiC55Fq_2GYG0pdHdxxJrvAhbCLuFzhM/edit?usp=sharing
+
+## DEX-core-smart-contracts gas flow schemes
+ * swap https://docs.google.com/drawings/d/1sE0ZcyN8adgMlRZC6r6rqtR9Fyq3u4zj7X9kA0ll_bM/edit?usp=sharing
+ * provide liquidity https://docs.google.com/drawings/d/1Cekvt35tKauEgWbGVz7-u0D6xJ6hhZux9-bmh0TBH-U/edit?usp=sharing
+ * return liquidity https://docs.google.com/drawings/d/1_TZsYPI7mIat6N2wYxS8tSWqMOcsKc3ze1WxeXHZTv8/edit?usp=sharing
 
 ## DEX-core-smart-contracts tests
 
