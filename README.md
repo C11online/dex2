@@ -1,10 +1,15 @@
 # DEX-core-smart-contracts
 
 ## Glossary
-from https://github.com/radianceteam/dex/blob/main/Radiance%20DEX%20stage%201.pdf
+* AMM — An automated market maker (AMM) is a type of decentralized exchange (DEX) protocol that relies on a mathematical formula to price assets. Instead of using an order book like a traditional exchange, assets are priced according to a ratio between assets in Liquidity Pools.
+* Liquidity Pools - liquidity pool is a trading venue for a pair of tokens.
+* Liquidity Provider – a user of the AMM DEX that add funds to pairs in return for a Liquidity Provider fees paid by traders for every trade.
+* Pair – a smart-contract system that manages DEX token reserves. A user can connect his client wallet to a pair to automatically deploy the respective TIP-3 wallets to perform token swap and provide liquidity.
+* TIP-3 token standard - Free TON standard interface for distributed tokens, provides basic functionality to mint and transfer tokens between token wallets.
+* Debot – special smart-contract, which intended to be run locally on client with full abilities to access blockchain. Primary goal is E2ED support.
 
 ## Description
-from https://github.com/radianceteam/dex/blob/main/Radiance%20DEX%20stage%201.pdf
+* User guides: https://docs.defispace.com
 
 ## DEX-core-smart-contracts stage2 develop goal
 1. DEX-core-smart-contracts developed for speed optimization dex operations. During stage 1 tested speed of msg between smartcontracts deployed in different shard of freeTON is about 15-20 sec. For dex operations which consist from more then 8 consecutive msgs it leads for operation time > 120 sec. Using sharding optimization we decreased this 10 times to 5-15 sec.
