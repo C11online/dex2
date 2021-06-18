@@ -160,13 +160,13 @@ contract DEXPair is IDEXPair, IDEXConnect, ITokensReceivedCallback, IBurnTokensC
   }
 
   // Function to get Quotient of division reserve max and min
-  function getQuotient(uint128 min, uint128 max) public pure alwaysAccept returns (uint128) {
+  function getQuotient(uint128 min, uint128 max) private inline pure returns (uint128) {
     (uint128 quotient, ) = math.muldivmod(1, max, min);
     return quotient;
   }
 
   // Function to get Remainder of division reserve max and min
-  function getRemainder(uint128 min, uint128 max) public pure alwaysAccept returns (uint128) {
+  function getRemainder(uint128 min, uint128 max) private inline pure returns (uint128) {
     (, uint128 remainder) = math.muldivmod(1, max, min);
     return remainder;
   }
