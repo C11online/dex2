@@ -12,6 +12,8 @@ const networkSelector = process.env.NET_SELECTOR;
 const fs = require('fs');
 const pathJsonRoot = './DEXRootContract.json';
 const pathJsonClient = './DEXClientContractLoadTest.json';
+const pathJsonClientSoData = './DEXClientSoDataLoadTest.json';
+
 
 const pathJsonPairTonUsdt = './DEXPairContractTonUsdt.json';
 const pathJsonWTON = './WTONdata.json';
@@ -37,6 +39,9 @@ function getShard(string) {
 
 async function main(client) {
   let responce;
+  let connectorSoArgArr = [];
+
+
   let resultArr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"}));
   const pairAddr = JSON.parse(fs.readFileSync(currentPairPath,{encoding: "utf8"})).address;
   for (const item of resultArr) {
@@ -125,6 +130,7 @@ async function main(client) {
           connectorSoArg2 = n;
           console.log("getWalletAddress:", walletAddr);
           console.log("connectorSoArg1:", n);
+          connectorSoArgArr.push(connectorSoArg2);
           status = true;
         } else {console.log(n);}
       } else {console.log(n);}
@@ -141,7 +147,10 @@ async function main(client) {
     response = await clientAcc.run("connectRoot", {root:rootAB,souint:connectorSoArg2,gramsToConnector:500000000,gramsToRoot:1500000000});
     console.log("Contract reacted to your connectRoot:", response.decoded.output);
 
-
+    console.log("connectorSoArgArr: ", connectorSoArgArr);
+    let connectorSoArgArrJson = JSON.stringify(connectorSoArgArr);
+    fs.writeFileSync( pathJsonClientSoData, connectorSoArgArrJson,{flag:'w'});
+    console.log("connectorSoArgArr written successfully to:", pathJsonClientSoData);
 
   }
 

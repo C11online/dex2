@@ -75,13 +75,13 @@ async function main(client) {
   const rootKeysA = JSON.parse(fs.readFileSync(currentRootA,{encoding: "utf8"})).keys;
   const rootAddrA = JSON.parse(fs.readFileSync(currentRootA,{encoding: "utf8"})).address;
   const rootAccA = new Account(RootTokenContract, {address: rootAddrA,signer:rootKeysA,client,});
-  console.log("BNB root:", rootAddrA);
+  console.log("WTON root:", rootAddrA);
 
 
   const rootKeysB = JSON.parse(fs.readFileSync(currentRootB,{encoding: "utf8"})).keys;
   const rootAddrB = JSON.parse(fs.readFileSync(currentRootB,{encoding: "utf8"})).address;
   const rootAccB = new Account(RootTokenContract, {address: rootAddrB,signer:rootKeysB,client,});
-  console.log("ETH root:", rootAddrB);
+  console.log("USDT root:", rootAddrB);
 
 
 

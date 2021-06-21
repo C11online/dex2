@@ -12,6 +12,9 @@ const networkSelector = process.env.NET_SELECTOR;
 const fs = require('fs');
 const pathJsonRoot = './DEXRootContract.json';
 const pathJsonClient = './DEXClientContractLoadTest.json';
+const pathJsonClientSoData = './DEXClientSoDataLoadTest.json';
+const pathJsonClientSoData1 = './DEXClientSoDataLoadTest1.json';
+
 
 const pathJsonPairTonUsdt = './DEXPairContractTonUsdt.json';
 const pathJsonPairTonEth = './DEXPairContractTonEth.json';
@@ -42,6 +45,10 @@ function getShard(string) {
 
 async function main(client) {
   let responce;
+  let connectorSoArgArr = JSON.parse(fs.readFileSync(pathJsonClientSoData,{encoding: "utf8"}));
+  let connectorSoArgArr1 = [];
+  let i = 0;
+
   let resultArr = JSON.parse(fs.readFileSync(pathJsonClient,{encoding: "utf8"}));
   const pairAddr = JSON.parse(fs.readFileSync(currentPairPath,{encoding: "utf8"})).address;
   for (const item of resultArr) {
@@ -68,7 +75,7 @@ async function main(client) {
 
     let connectorSoArg0;
     status = false;
-    n = 1406;
+    n = connectorSoArgArr[i];
     while (!status) {
       response = await clientAcc.runLocal("getConnectorAddress", {_answer_id:0,connectorSoArg:n});
       let connectorAddr = response.decoded.output.value0;
@@ -130,6 +137,8 @@ async function main(client) {
           connectorSoArg2 = n;
           console.log("getWalletAddress:", walletAddr);
           console.log("connectorSoArg1:", n);
+          connectorSoArgArr1.push(connectorSoArg2);
+
           status = true;
         } else {console.log(n);}
       } else {console.log(n);}
@@ -146,7 +155,12 @@ async function main(client) {
     response = await clientAcc.run("connectRoot", {root:rootAB,souint:connectorSoArg2,gramsToConnector:500000000,gramsToRoot:1500000000});
     console.log("Contract reacted to your connectRoot:", response.decoded.output);
 
+    console.log("connectorSoArgArr1: ", connectorSoArgArr1);
+    let connectorSoArgArrJson1 = JSON.stringify(connectorSoArgArr1);
+    fs.writeFileSync( pathJsonClientSoData1, connectorSoArgArrJson1,{flag:'w'});
+    console.log("connectorSoArgArr written successfully to:", pathJsonClientSoData1);
 
+    i++;
 
   }
 

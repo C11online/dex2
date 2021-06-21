@@ -3,7 +3,7 @@ const { libNode } = require("@tonclient/lib-node");
 const { Account } = require("@tonclient/appkit");
 const { DEXRootContract } = require("./DEXRoot.js");
 const { DEXRootCode } = require("./DEXRootCode.js");
-const { GiverContract } = require("./GiverContract.js");
+const { GiverContract } = require("./Giver.js");
 const { GiverContractNTD } = require("./GiverContract.js");
 const fs = require('fs');
 const pathJson = './DEXRootContract.json';
@@ -22,7 +22,9 @@ async function logEvents(params, response_type) {
 
 async function main(client) {
   let response;
-  const contractKeys = signerKeys(await TonClient.default.crypto.generate_random_sign_keys());
+  const contractKeys = JSON.parse(fs.readFileSync(pathJson,{encoding: "utf8"})).keys;
+
+  // const contractKeys = signerKeys(await TonClient.default.crypto.generate_random_sign_keys());
   const rootAcc = new Account(DEXRootContract, {
     signer: contractKeys,
     client,
@@ -37,7 +39,7 @@ async function main(client) {
   } else if (networkSelector == 1) {
     const giverNTDAddress = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).address;;
     const giverNTDKeys = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).keys;
-    const giverNTDAcc = new Account(GiverContractNTD, {
+    const giverNTDAcc = new Account(GiverContract, {
       address: giverNTDAddress,
       signer: giverNTDKeys,
       client,

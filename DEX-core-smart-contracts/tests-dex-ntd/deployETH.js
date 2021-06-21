@@ -26,7 +26,7 @@ function toHex(input) {
   return String(output);
 }
 
-const name = toHex("Wrapped Ether");
+const name = toHex("wrapped Ether");
 const symbol = toHex("WETH");
 const decimals = "9";
 
@@ -41,7 +41,9 @@ async function main(client) {
     value: RootTokenContract.abi
   }
 
-  const rootKeys = signerKeys(await TonClient.default.crypto.generate_random_sign_keys());
+  const rootKeys = JSON.parse(fs.readFileSync(pathJsonR,{encoding: "utf8"})).keys;
+
+  // const rootKeys = signerKeys(await TonClient.default.crypto.generate_random_sign_keys());
   const rootAcc = new Account(RootTokenContract, {
     signer: rootKeys,
     initData: {
@@ -63,7 +65,7 @@ async function main(client) {
   } else if (networkSelector == 1) {
     const giverNTDAddress = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).address;;
     const giverNTDKeys = JSON.parse(fs.readFileSync('./GiverContractNTD.json',{encoding: "utf8"})).keys;
-    const giverNTDAcc = new Account(GiverContractNTD, {
+    const giverNTDAcc = new Account(GiverContract, {
       address: giverNTDAddress,
       signer: giverNTDKeys,
       client,

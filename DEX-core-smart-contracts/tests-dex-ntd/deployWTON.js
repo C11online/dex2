@@ -6,7 +6,7 @@ const { RootTokenContract } = require("./RootTokenContract.js");
 const { TONTokenWalletContract } = require("./TONTokenWallet.js");
 const { DEXRootCode } = require("./DEXRootCode.js");
 // const { GiverContract } = require("./Giver.js");
-const { GiverContract } = require("./GiverContract.js");
+const { GiverContract } = require("./Giver.js");
 
 const networks = ["http://localhost",'net.ton.dev','main.ton.dev','rustnet.ton.dev'];
 const hello = ["Hello localhost TON!","Hello dev net TON!","Hello main net TON!","Hello rust dev net TON!"];
@@ -44,7 +44,9 @@ async function main(client) {
     value: RootTokenContract.abi
   }
 
-  const rootKeys = signerKeys(await TonClient.default.crypto.generate_random_sign_keys());
+  const rootKeys = JSON.parse(fs.readFileSync(pathJsonR,{encoding: "utf8"})).keys;
+
+  // const rootKeys = signerKeys(await TonClient.default.crypto.generate_random_sign_keys());
   const rootAcc = new Account(RootTokenContract, {
     signer: rootKeys,
     initData: {
@@ -103,7 +105,7 @@ shard_block_id = (await client.processing.send_message({
   send_events: true,
 }, logEvents,
 )).shard_block_id;
-console.log(`Deploy rootUSDC message was sent.`);
+console.log(`Deploy rootWTON message was sent.`);
 
 // Monitor message delivery.
 // See more info about `wait_for_transaction` here
